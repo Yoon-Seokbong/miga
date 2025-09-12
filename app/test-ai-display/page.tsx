@@ -19,9 +19,10 @@ interface SourcedProduct {
   tags?: string;
 }
 
-const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
+const TestAiDisplayPage = () => {
   const router = useRouter();
-  const id = params.id as string;
+  // For testing, we'll use a hardcoded ID or fetch a default product
+  const id = 'cmfeivqi70006wdzspv6jmbrl'; // Using the previous test product ID
 
   const [product, setProduct] = useState<SourcedProduct | null>(null);
   const [generatedDetailContent, setGeneratedDetailContent] = useState<string>('');
@@ -186,4 +187,4 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default EditAiDetailPage;
+export default TestAiDisplayPage;
