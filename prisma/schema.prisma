@@ -1,0 +1,286 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String @unique
+  description String?
+  price       Float
+  stock       Int      @default(0) // New: Stock quantity
+  brand       String? // New: Brand of the product
+  tags        String? // New: Tags for filtering and categorization
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  images        ProductImage[]
+  detailImages  ProductDetailImage[]
+  videos        ProductVideo[] // Added for videos
+  OrderLineItem OrderLineItem[]
+  reviews       Review[] // Added for reviews
+  questions     Question[] // Added for questions
+  wishlistedBy  Wishlist[]
+
+  detailContent String? // NEW FIELD: To store AI-generated or manually edited HTML content
+
+  @@index([categoryId])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductDetailImage {
+  id        String   @id @default(cuid())
+  url       String
+  order     Int
+  createdAt DateTime @default(now())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductVideo {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id        String @id @default(cuid())
+  name      String @unique
+  products  Product[]
+
+  // New fields for hierarchy
+  parentId  String?
+  parent    Category? @relation("Subcategories", fields: [parentId], references: [id])
+  subcategories Category[] @relation("Subcategories")
+
+  @@index([parentId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  phoneNumber String? // Added for personal info editing
+
+  orders    Order[]
+  reviews   Review[] // Added for user's reviews
+  questions Question[] // Added for user's questions
+  answers   Answer[] // Added for user's answers
+  addresses Address[] // Added for address book management
+  wishlistItems Wishlist[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address1  String
+  address2  String? // Optional: Apt, Suite, etc.
+  city      String
+  state     String? // Optional: State/Province
+  zipCode   String
+  country   String   @default("대한민국") // Default to Korea
+  isDefault Boolean  @default(false) // To mark a default address
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Order {
+  id              String    @id @default(cuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+
+  total           Float
+  lineItems       OrderLineItem[]
+  isPaid          Boolean   @default(false) // Keep for quick check, but 'status' will be primary
+  shippingAddress String?
+
+  // Coupon/Discount Fields
+  appliedCouponCode String?   
+  discountAmount    Float?    @default(0)
+
+  // Toss Payments related fields
+  paymentKey      String?   @unique // Unique identifier for the payment transaction
+  tossOrderId     String?   @unique // Toss Payments' internal order ID
+  paymentMethod   String?
+  status          String    @default("PENDING") // PENDING, PAID, CANCELLED, REFUNDED, PARTIAL_REFUND
+  approvedAt      DateTime?
+  receiptUrl      String?
+}
+
+model OrderLineItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  price     Float // Price at the time of purchase
+
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductRequest {
+  id             String    @id @default(cuid())
+  productName    String
+  productUrl     String?
+  description    String?
+  requesterEmail String?
+  imageUrl       String?
+  status         String    @default("pending")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+// New models for Reviews and Q&A
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int      // e.g., 1 to 5 stars
+  comment   String?
+  status    ContentStatus @default(PENDING) // Added for moderation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  images    ReviewImage[] // Added for review images
+  videos    ReviewVideo[] // Added for review videos
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  questionText String
+  status      ContentStatus @default(PENDING) // Added for moderation
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  answers     Answer[]
+}
+
+model Answer {
+  id          String   @id @default(cuid())
+  questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userId      String   // User who answered (could be admin or another user)
+  user        User     @relation(fields: [userId], references: [id])
+  answerText  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Enum for content moderation status
+enum ContentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// New model for ReviewImage
+model ReviewImage {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+  reviewId  String
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
+
+// New model for ReviewVideo
+model ReviewVideo {
+  id        String   @id @default(cuid())
+  url       String
+  status    ContentStatus @default(PENDING) // Added for moderation
+  createdAt DateTime @default(now())
+  reviewId  String
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
+
+model SourcedProduct {
+  id              String    @id @default(cuid())
+  sourceUrl       String    @unique
+  sourceProductId String?
+  sourcePlatform  String    // e.g., "Amazon", "AliExpress"
+  originalName    String
+  translatedName  String?
+  originalDescription String?
+  originalProductDataJson Json? // Added to store full original data
+  translatedDescription String?
+  originalPrice   Float
+  currency        String
+  localPrice      Int?
+  images          Json?     // Store original image URLs
+  videos          Json?     // Store original video URLs
+  attributes      Json?     // Store product attributes
+  detailContent   String?   // New: Structured content for detail page
+  status          String    @default("PENDING") // PENDING, REVIEW, IMPORTED, REJECTED
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+
+// Coupon System Models
+
+model Coupon {
+  id                String       @id @default(cuid())
+  code              String       @unique
+  discountType      DiscountType
+  discountValue     Float
+  expiresAt         DateTime?
+  isActive          Boolean      @default(true)
+  usageLimit        Int?         // How many times the coupon can be used in total
+  timesUsed         Int          @default(0)
+  minPurchaseAmount Float?       // Minimum purchase amount to be eligible
+  createdAt         DateTime     @default(now())
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}

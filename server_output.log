@@ -1,0 +1,62 @@
+
+> miga-ecommerce-store@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.4.6
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.37:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 4.2s
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 3.5s (844 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/b6e48b16d024921c.webpack.hot-update.json 404 in 6179ms
+ ○ Compiling /products/[id] ...
+ ⨯ ./src/app/products/[id]/page.tsx
+Error:   [31mx[0m Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[[36;1;4mC:\Users\emiga\miga-ecommerce-store\src\app\products\[id]\page.tsx[0m:578:1]
+ [2m575[0m |       </div>
+ [2m576[0m |     </div>
+ [2m577[0m |   );
+ [2m578[0m | }
+     : [35;1m^[0m
+     `----
+  [31mx[0m Unexpected eof
+     ,-[[36;1;4mC:\Users\emiga\miga-ecommerce-store\src\app\products\[id]\page.tsx[0m:578:3]
+ [2m576[0m |     </div>
+ [2m577[0m |   );
+ [2m578[0m | }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/products/[id]/page.tsx
+ ⨯ ./src/app/products/[id]/page.tsx
+Error:   [31mx[0m Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[[36;1;4mC:\Users\emiga\miga-ecommerce-store\src\app\products\[id]\page.tsx[0m:578:1]
+ [2m575[0m |       </div>
+ [2m576[0m |     </div>
+ [2m577[0m |   );
+ [2m578[0m | }
+     : [35;1m^[0m
+     `----
+  [31mx[0m Unexpected eof
+     ,-[[36;1;4mC:\Users\emiga\miga-ecommerce-store\src\app\products\[id]\page.tsx[0m:578:3]
+ [2m576[0m |     </div>
+ [2m577[0m |   );
+ [2m578[0m | }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/products/[id]/page.tsx
+ GET /_next/static/webpack/b6e48b16d024921c.webpack.hot-update.json 500 in 1790ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /products/cmekic93k0002wdj08oy3rorg 500 in 40ms
+^C^C

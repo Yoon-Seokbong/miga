@@ -1,0 +1,825 @@
+{
+  "id": 950304444046,
+  "url": "https://detail.1688.com/offer/950304444046.html",
+  "title": "畅销俄罗斯电动车自行车山地车越野车electric bicycle dirtbike",
+  "sale_num_txt": null,
+  "sale_count_date_txt": null,
+  "is_best_offer": false,
+  "labels": [],
+  "attributes": [
+    {
+      "fid": 3151,
+      "is_special": false,
+      "lectotype": false,
+      "name": "型号",
+      "output_type": 0,
+      "value": "M5",
+      "values": [
+        "M5"
+      ]
+    },
+    {
+      "fid": 2176,
+      "is_special": false,
+      "lectotype": false,
+      "name": "品牌",
+      "output_type": 0,
+      "value": "RUNFLY",
+      "values": [
+        "RUNFLY"
+      ]
+    },
+    {
+      "fid": 404,
+      "is_special": false,
+      "lectotype": false,
+      "name": "颜色",
+      "output_type": 0,
+      "value": "14\"/12\"轮子48V 2000W20.4AH,50km/h,14\"/12\"轮子48V 3000W23.4AH,55km/h,14\"/12\"轮子60V 3500W27AH,65km/h,14\"/12\"轮子72V 4500W25AH,75km/h,17\"/14\"轮子72V 4500W25AH,75km/h,17\"/14\"轮子72V 6500W25AH,85km/h,17\"/14\"轮子60V 3500W27AH,70km/h",
+      "values": [
+        "14\"/12\"轮子48V 2000W20.4AH,50km/h",
+        "14\"/12\"轮子48V 3000W23.4AH,55km/h",
+        "14\"/12\"轮子60V 3500W27AH,65km/h",
+        "14\"/12\"轮子72V 4500W25AH,75km/h",
+        "17\"/14\"轮子72V 4500W25AH,75km/h",
+        "17\"/14\"轮子72V 6500W25AH,85km/h",
+        "17\"/14\"轮子60V 3500W27AH,70km/h"
+      ]
+    },
+    {
+      "fid": 100018488,
+      "is_special": false,
+      "lectotype": false,
+      "name": "最高时速",
+      "output_type": 0,
+      "value": "18km/h以上",
+      "values": [
+        "18km/h以上"
+      ]
+    },
+    {
+      "fid": 100001122,
+      "is_special": false,
+      "lectotype": false,
+      "name": "续航里程",
+      "output_type": 0,
+      "value": "35km以上",
+      "values": [
+        "35km以上"
+      ]
+    },
+    {
+      "fid": 9896,
+      "is_special": false,
+      "lectotype": false,
+      "name": "是否可折叠",
+      "output_type": 0,
+      "value": "否",
+      "values": [
+        "否"
+      ]
+    },
+    {
+      "fid": 3873,
+      "is_special": false,
+      "lectotype": false,
+      "name": "最大载重",
+      "output_type": 0,
+      "value": "150KGS",
+      "values": [
+        "150KGS"
+      ]
+    },
+    {
+      "fid": 1811,
+      "is_special": false,
+      "lectotype": false,
+      "name": "款式",
+      "output_type": 0,
+      "value": "两轮",
+      "values": [
+        "两轮"
+      ]
+    },
+    {
+      "fid": 1661,
+      "is_special": false,
+      "lectotype": false,
+      "name": "净重",
+      "output_type": 0,
+      "value": "40KG以上",
+      "values": [
+        "40KG以上"
+      ]
+    },
+    {
+      "fid": 716,
+      "is_special": false,
+      "lectotype": false,
+      "name": "电压",
+      "output_type": 0,
+      "value": "60V",
+      "values": [
+        "60V"
+      ]
+    },
+    {
+      "fid": 671,
+      "is_special": false,
+      "lectotype": false,
+      "name": "电池类型",
+      "output_type": 0,
+      "value": "锂电池",
+      "values": [
+        "锂电池"
+      ]
+    },
+    {
+      "fid": 1836,
+      "is_special": false,
+      "lectotype": false,
+      "name": "类型",
+      "output_type": 0,
+      "value": "锂电池",
+      "values": [
+        "锂电池"
+      ]
+    },
+    {
+      "fid": 182318189,
+      "is_special": false,
+      "lectotype": false,
+      "name": "主要下游平台",
+      "output_type": 0,
+      "value": "ebay,wish,速卖通,独立站,LAZADA",
+      "values": [
+        "ebay",
+        "wish",
+        "速卖通",
+        "独立站",
+        "LAZADA"
+      ]
+    },
+    {
+      "fid": 100301270,
+      "is_special": false,
+      "lectotype": false,
+      "name": "主要销售地区",
+      "output_type": 0,
+      "value": "欧洲,南美,东南亚,东北亚",
+      "values": [
+        "欧洲",
+        "南美",
+        "东南亚",
+        "东北亚"
+      ]
+    },
+    {
+      "fid": 193290003,
+      "is_special": false,
+      "lectotype": false,
+      "name": "有可授权的自有品牌",
+      "output_type": 0,
+      "value": "是",
+      "values": [
+        "是"
+      ]
+    },
+    {
+      "fid": 182282223,
+      "is_special": false,
+      "lectotype": false,
+      "name": "是否跨境出口专供货源",
+      "output_type": 0,
+      "value": "是",
+      "values": [
+        "是"
+      ]
+    },
+    {
+      "fid": 287,
+      "is_special": false,
+      "lectotype": false,
+      "name": "材质",
+      "output_type": 0,
+      "value": "铝合金",
+      "values": [
+        "铝合金"
+      ]
+    },
+    {
+      "fid": 9910,
+      "is_special": false,
+      "lectotype": false,
+      "name": "售后服务",
+      "output_type": 0,
+      "value": "全国联保",
+      "values": [
+        "全国联保"
+      ]
+    }
+  ],
+  "logistics_infos": null,
+  "main_images": [
+    {
+      "size220x220_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.220x220.jpg",
+      "image_u_r_i": "img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.jpg",
+      "search_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.search.jpg",
+      "summ_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.summ.jpg",
+      "size310x310_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.310x310.jpg",
+      "full_path_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.jpg"
+    },
+    {
+      "size220x220_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.220x220.jpg",
+      "image_u_r_i": "img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.jpg",
+      "search_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.search.jpg",
+      "summ_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.summ.jpg",
+      "size310x310_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.310x310.jpg",
+      "full_path_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.jpg"
+    },
+    {
+      "size220x220_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.220x220.jpg",
+      "image_u_r_i": "img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.jpg",
+      "search_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.search.jpg",
+      "summ_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.summ.jpg",
+      "size310x310_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.310x310.jpg",
+      "full_path_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.jpg"
+    },
+    {
+      "size220x220_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.220x220.jpg",
+      "image_u_r_i": "img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.jpg",
+      "search_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.search.jpg",
+      "summ_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.summ.jpg",
+      "size310x310_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.310x310.jpg",
+      "full_path_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.jpg"
+    },
+    {
+      "size220x220_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.220x220.jpg",
+      "image_u_r_i": "img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.jpg",
+      "search_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.search.jpg",
+      "summ_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.summ.jpg",
+      "size310x310_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.310x310.jpg",
+      "full_path_image_u_r_i": "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.jpg"
+    }
+  ],
+  "main_videos": {
+    "ab_test_info": {
+      "ab_test_value_info": {
+        "od_new_black_brand_txt": "1",
+        "show_offer_size_table": "1",
+        "gypsanweisku": "1",
+        "zeus_gyp_sku_select_hot_recommend": "0",
+        "zeus_gyp_onhand_price": "1",
+        "sku_short_title": "base",
+        "page_zgc_dimension": "0",
+        "page_yanxuan_quality_cert": "N",
+        "page_dsc_xhdz_upgrade": "1",
+        "page_add_custom_service": "1"
+      },
+      "expose_click_info": {},
+      "pv_track_info": {
+        "ab_ids": "2515413#2517407#2518968"
+      }
+    },
+    "banners": {
+      "ali_pay_offer_detail_banner": {
+        "banner_jump_url": "",
+        "banner_url": ""
+      },
+      "offer_detail_banner24_v1": {
+        "banner_jump_url": "",
+        "banner_url": ""
+      },
+      "big_promotion_banner": {
+        "banner_jump_url": "https://runflytech.1688.com/page/activity.htm?offerId=950304444046#promotion",
+        "banner_url": ""
+      },
+      "offer_detail_banner": {
+        "banner_jump_url": "",
+        "banner_url": ""
+      },
+      "dacu_banner": {
+        "banner_jump_url": "",
+        "banner_url": ""
+      }
+    },
+    "cross_border_infos": {
+      "kj_p_c_distribution_name": "跨境铺货"
+    },
+    "data_desc": {
+      "pay_order30_day_str": "4万+"
+    },
+    "delivery_limit": 25,
+    "expose_info": {
+      "expose_args": {
+        "is_yanxuan_offer": "false",
+        "scene_type": "default",
+        "ipv_id": "213e363017572823147797672ec306",
+        "is_plus_member": "false",
+        "vertical_type": "default",
+        "offer_id": "950304444046",
+        "channel_type": "dsc"
+      }
+    },
+    "freight_info": {
+      "delivery_fee": "TEMPLATED",
+      "delivery_limit": 25,
+      "free_deliver_fee": false,
+      "free_end_amount": -1,
+      "location": "浙江省金华市",
+      "location_code": "30103135",
+      "location_division_code": "330784",
+      "logistics_text": "承诺25天发货",
+      "official_logistics": false,
+      "sku_weight": {
+        "6084307099596": 71,
+        "5917235580851": 71,
+        "5917235580852": 76,
+        "5917235580853": 71,
+        "5917235580854": 71,
+        "6085367946775": 76,
+        "5917235580855": 76
+      },
+      "sub_template_id": 17560834,
+      "total_cost": 100,
+      "unit_weight": 0
+    },
+    "images": {
+      "activity_back_color": "",
+      "caution_image_url": "https://gw.alicdn.com/imgextra/i4/O1CN01Ksff3T1XbwZuDh23W_!!6000000002943-0-tps-1125-231.jpg",
+      "share_with_gift_icon": "https://gw.alicdn.com/tfs/TB1YYyRuhTpK1RjSZFMXXbG_VXa-36-36.png",
+      "wireless_corner": "",
+      "activity_url": "",
+      "wireless_label": "",
+      "background": "",
+      "background_icon": "",
+      "icon_url": "",
+      "official_activity_icon": ""
+    },
+    "offer_u_v_of7_day": 992,
+    "official_doc_infos": [],
+    "piece_weight_scale": {
+      "column_list": [
+        {
+          "fid": 404,
+          "label": "颜色",
+          "name": "sku1",
+          "precision": 0
+        },
+        {
+          "label": "长(cm)",
+          "name": "length",
+          "precision": 2
+        },
+        {
+          "label": "宽(cm)",
+          "name": "width",
+          "precision": 2
+        },
+        {
+          "label": "高(cm)",
+          "name": "height",
+          "precision": 2
+        },
+        {
+          "label": "体积(cm³)",
+          "name": "volume",
+          "precision": 3
+        },
+        {
+          "label": "重量(g)",
+          "name": "weight",
+          "precision": 0
+        }
+      ],
+      "piece_weight_scale_info": [
+        {
+          "height": 64,
+          "length": 137,
+          "sku1": "14\"/12\"轮子48V 2000W20.4AH,50km/h",
+          "sku_id": 6084307099596,
+          "volume": 328800,
+          "weight": 71000,
+          "width": 37.5
+        },
+        {
+          "height": 64,
+          "length": 137,
+          "sku1": "14\"/12\"轮子48V 3000W23.4AH,55km/h",
+          "sku_id": 5917235580854,
+          "volume": 328800,
+          "weight": 71000,
+          "width": 37.5
+        },
+        {
+          "height": 64,
+          "length": 137,
+          "sku1": "14\"/12\"轮子60V 3500W27AH,65km/h",
+          "sku_id": 5917235580853,
+          "volume": 328800,
+          "weight": 71000,
+          "width": 37.5
+        },
+        {
+          "height": 64,
+          "length": 137,
+          "sku1": "14\"/12\"轮子72V 4500W25AH,75km/h",
+          "sku_id": 5917235580851,
+          "volume": 328800,
+          "weight": 71000,
+          "width": 37.5
+        },
+        {
+          "height": 74,
+          "length": 150,
+          "sku1": "17\"/14\"轮子72V 4500W25AH,75km/h",
+          "sku_id": 5917235580855,
+          "volume": 432900,
+          "weight": 76000,
+          "width": 39
+        },
+        {
+          "height": 74,
+          "length": 150,
+          "sku1": "17\"/14\"轮子72V 6500W25AH,85km/h",
+          "sku_id": 5917235580852,
+          "volume": 432900,
+          "weight": 76000,
+          "width": 39
+        },
+        {
+          "height": 74,
+          "length": 150,
+          "sku1": "17\"/14\"轮子60V 3500W27AH,70km/h",
+          "sku_id": 6085367946775,
+          "volume": 432900,
+          "weight": 76000,
+          "width": 39
+        }
+      ]
+    },
+    "protection_info_list": [
+      {
+        "buyer_description": "h晚发即赔",
+        "description": "平台严格考核准时发货，24/48/72小时发货超时,您可在此笔订单中申请违约赔付。",
+        "logo_url": "https://img.alicdn.com/imgextra/i4/O1CN01o9ZUt31OEjlElVA99_!!6000000001674-2-tps-64-64.png",
+        "logo_url_16_16": "https://img.alicdn.com/imgextra/i3/O1CN01tJkSpg1qbv3AakBwI_!!6000000005515-2-tps-16-16.png",
+        "logo_url_64_64": "https://img.alicdn.com/imgextra/i4/O1CN01o9ZUt31OEjlElVA99_!!6000000001674-2-tps-64-64.png",
+        "long_description": "卖家作出晚发即赔承诺后，符合条件的逾期订单进行赔付。",
+        "service_code": "ybp",
+        "service_name": "晚发即赔",
+        "type": "protect"
+      },
+      {
+        "agree_delivery_hours": 600,
+        "buyer_description": "4天发货",
+        "description": "若商家未按订单约定的时间发货，您可以在订单详情申请赔付",
+        "logo_url": "https://img.alicdn.com/imgextra/i3/O1CN01Upo2KV1i367otF3zi_!!6000000004356-2-tps-64-64.png",
+        "logo_url_16_16": "https://img.alicdn.com/imgextra/i1/O1CN01AWVbxJ1wfTwCsbmWU_!!6000000006335-2-tps-16-16.png",
+        "logo_url_64_64": "https://img.alicdn.com/imgextra/i3/O1CN01Upo2KV1i367otF3zi_!!6000000004356-2-tps-64-64.png",
+        "long_description": "卖家在买家保障服务的基础上，给买家提供承诺发货时间的服务。在买家完成付款或通过货到付款下单成功后，卖家需按照订单上的承诺时间内发货。如卖家未履行前述承诺，买家可在指定期限内发起维权，并申请赔付。",
+        "service_code": "eswtfh",
+        "service_link": "https://show.1688.com/vip/other/1bpmrma4.html?spm=a261y.7663282.0.0.7ff76415JzUrE2&__pageId__=227845&cms_id=227845",
+        "service_name": "晚发必赔",
+        "type": "protect"
+      }
+    ],
+    "share_activity_info": {},
+    "texts": {
+      "brand_relation_type": "",
+      "brand_name": "",
+      "trade_template_id": "[0]",
+      "caution_text": "1.请严格按照使用说明书要求进行安装和使用，注意充电安全；2.严禁非法改装，行驶过程中请严格遵守相关交通规则要求。",
+      "wireless_label_text": ""
+    },
+    "urls": {}
+  },
+  "wholesale_price_model": {
+    "is_bm_price": false,
+    "channel": "dsc",
+    "is_vip_price": false,
+    "big_promotion_info": {
+      "big_promotion_countdown": -1,
+      "preheat_time": -1,
+      "promotion_resources": {},
+      "burst_end_time": -1,
+      "big_promotion_status": "NONE",
+      "burst_begin_time": -1
+    },
+    "final_price_model": {
+      "trade_without_promotion": {
+        "sku_map_original": [
+          {
+            "spec_id": "47f2a7a872d38c8ee4fe1ef904b425ae",
+            "spec_attrs": "14\"/12\"轮子48V 2000W20.4AH,50km/h",
+            "price": "4990.00",
+            "sale_count": 0,
+            "discount_price": "4990.00",
+            "can_book_count": 467,
+            "sku_id": 6084307099596,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "5684059ebcc3a97ba3d5c947f99ae38e",
+            "spec_attrs": "14\"/12\"轮子48V 3000W23.4AH,55km/h",
+            "price": "5590.00",
+            "sale_count": 0,
+            "discount_price": "5590.00",
+            "can_book_count": 471,
+            "sku_id": 5917235580854,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "641328ca3aad572bc46fded743853666",
+            "spec_attrs": "14\"/12\"轮子60V 3500W27AH,65km/h",
+            "price": "6990.00",
+            "sale_count": 0,
+            "discount_price": "6990.00",
+            "can_book_count": 475,
+            "sku_id": 5917235580853,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "786560ffd51a6ba509b13d6a2e44f1ee",
+            "spec_attrs": "17\"/14\"轮子72V 6500W25AH,85km/h",
+            "price": "11900.00",
+            "sale_count": 0,
+            "discount_price": "11900.00",
+            "can_book_count": 200,
+            "sku_id": 5917235580852,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "1a49ec03b599c4da7d6282a93b396011",
+            "spec_attrs": "17\"/14\"轮子60V 3500W27AH,70km/h",
+            "price": "8390.00",
+            "sale_count": 0,
+            "discount_price": "8390.00",
+            "can_book_count": 398,
+            "sku_id": 6085367946775,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "23285e6c09254a760adf43433dd6664d",
+            "spec_attrs": "14\"/12\"轮子72V 4500W25AH,75km/h",
+            "price": "7790.00",
+            "sale_count": 0,
+            "discount_price": "7790.00",
+            "can_book_count": 475,
+            "sku_id": 5917235580851,
+            "is_promotion_sku": false
+          },
+          {
+            "spec_id": "3c58ec8895e81102b47babb23242edb2",
+            "spec_attrs": "17\"/14\"轮子72V 4500W25AH,75km/h",
+            "price": "8890.00",
+            "sale_count": 0,
+            "discount_price": "8890.00",
+            "can_book_count": 473,
+            "sku_id": 5917235580855,
+            "is_promotion_sku": false
+          }
+        ],
+        "offer_is_sku_trade_supported": true,
+        "offer_max_price": "11900.00",
+        "offer_begin_amount": 1,
+        "offer_price_display": "4990.00-11900.00",
+        "can_booked_amount_original": 2959,
+        "offer_min_price": "4990.00"
+      },
+      "price_before_text": "券后"
+    },
+    "market_scene": "default",
+    "track_info": {},
+    "is_private_price": false,
+    "origin_price_type": "skuPrice",
+    "activity_model": {
+      "before_pro": false,
+      "privileges_type": "default"
+    },
+    "price_model": {
+      "price_adv": {
+        "source": "OTHER"
+      },
+      "current_prices": [
+        {
+          "price": "4990.00",
+          "begin_amount": 1
+        },
+        {
+          "price": "11900.00",
+          "begin_amount": 1
+        }
+      ],
+      "price_display_type": "skuPrice",
+      "price_label": ""
+    },
+    "big_promotion": false,
+    "label": "价格",
+    "display_type": "normal-sku",
+    "unit": "台",
+    "secondary_atmosphere": {},
+    "ui_type": "od_main_price",
+    "is_plus_price": false,
+    "original_prices_without_promotion": [
+      {
+        "price": "4990.00",
+        "begin_amount": "1"
+      },
+      {
+        "price": "11900.00",
+        "begin_amount": "1"
+      }
+    ]
+  },
+  "dropshipping_price_model": null,
+  "company_name": "永康市炉飞科技有限公司",
+  "seller_user_id": 3944176405,
+  "seller_login_id": "runfly",
+  "seller_member_id": "b2b-3944176405975a2",
+  "wholesale_skus": {
+    "sku_props": [
+      {
+        "fid": 404,
+        "prop": "颜色",
+        "value": [
+          {
+            "name": "14\"/12\"轮子48V 2000W20.4AH,50km/h"
+          },
+          {
+            "name": "14\"/12\"轮子48V 3000W23.4AH,55km/h"
+          },
+          {
+            "name": "14\"/12\"轮子60V 3500W27AH,65km/h"
+          },
+          {
+            "name": "14\"/12\"轮子72V 4500W25AH,75km/h"
+          },
+          {
+            "name": "17\"/14\"轮子72V 4500W25AH,75km/h"
+          },
+          {
+            "name": "17\"/14\"轮子72V 6500W25AH,85km/h"
+          },
+          {
+            "name": "17\"/14\"轮子60V 3500W27AH,70km/h"
+          }
+        ]
+      }
+    ],
+    "sku_info_map": {
+      "14\"/12\"轮子60_v 3500_w27_a_h,65km/h": {
+        "spec_id": "641328ca3aad572bc46fded743853666",
+        "spec_attrs": "14\"/12\"轮子60V 3500W27AH,65km/h",
+        "price": "6990.00",
+        "sale_count": 0,
+        "discount_price": "6990.00",
+        "can_book_count": 475,
+        "sku_id": 5917235580853,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子72_v 6500_w25_a_h,85km/h": {
+        "spec_id": "786560ffd51a6ba509b13d6a2e44f1ee",
+        "spec_attrs": "17\"/14\"轮子72V 6500W25AH,85km/h",
+        "price": "11900.00",
+        "sale_count": 0,
+        "discount_price": "11900.00",
+        "can_book_count": 200,
+        "sku_id": 5917235580852,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子60_v 3500_w27_a_h,70km/h": {
+        "spec_id": "1a49ec03b599c4da7d6282a93b396011",
+        "spec_attrs": "17\"/14\"轮子60V 3500W27AH,70km/h",
+        "price": "8390.00",
+        "sale_count": 0,
+        "discount_price": "8390.00",
+        "can_book_count": 398,
+        "sku_id": 6085367946775,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子72_v 4500_w25_a_h,75km/h": {
+        "spec_id": "23285e6c09254a760adf43433dd6664d",
+        "spec_attrs": "14\"/12\"轮子72V 4500W25AH,75km/h",
+        "price": "7790.00",
+        "sale_count": 0,
+        "discount_price": "7790.00",
+        "can_book_count": 475,
+        "sku_id": 5917235580851,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子72_v 4500_w25_a_h,75km/h": {
+        "spec_id": "3c58ec8895e81102b47babb23242edb2",
+        "spec_attrs": "17\"/14\"轮子72V 4500W25AH,75km/h",
+        "price": "8890.00",
+        "sale_count": 0,
+        "discount_price": "8890.00",
+        "can_book_count": 473,
+        "sku_id": 5917235580855,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子48_v 2000_w20.4_a_h,50km/h": {
+        "spec_id": "47f2a7a872d38c8ee4fe1ef904b425ae",
+        "spec_attrs": "14\"/12\"轮子48V 2000W20.4AH,50km/h",
+        "price": "4990.00",
+        "sale_count": 0,
+        "discount_price": "4990.00",
+        "can_book_count": 467,
+        "sku_id": 6084307099596,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子48_v 3000_w23.4_a_h,55km/h": {
+        "spec_id": "5684059ebcc3a97ba3d5c947f99ae38e",
+        "spec_attrs": "14\"/12\"轮子48V 3000W23.4AH,55km/h",
+        "price": "5590.00",
+        "sale_count": 0,
+        "discount_price": "5590.00",
+        "can_book_count": 471,
+        "sku_id": 5917235580854,
+        "is_promotion_sku": false
+      }
+    },
+    "sku_price_scale": "4990.00-11900.00",
+    "sku_info_map_original": {
+      "14\"/12\"轮子60_v 3500_w27_a_h,65km/h": {
+        "spec_id": "641328ca3aad572bc46fded743853666",
+        "spec_attrs": "14\"/12\"轮子60V 3500W27AH,65km/h",
+        "price": "6990.00",
+        "sale_count": 0,
+        "discount_price": "6990.00",
+        "can_book_count": 475,
+        "sku_id": 5917235580853,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子72_v 6500_w25_a_h,85km/h": {
+        "spec_id": "786560ffd51a6ba509b13d6a2e44f1ee",
+        "spec_attrs": "17\"/14\"轮子72V 6500W25AH,85km/h",
+        "price": "11900.00",
+        "sale_count": 0,
+        "discount_price": "11900.00",
+        "can_book_count": 200,
+        "sku_id": 5917235580852,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子60_v 3500_w27_a_h,70km/h": {
+        "spec_id": "1a49ec03b599c4da7d6282a93b396011",
+        "spec_attrs": "17\"/14\"轮子60V 3500W27AH,70km/h",
+        "price": "8390.00",
+        "sale_count": 0,
+        "discount_price": "8390.00",
+        "can_book_count": 398,
+        "sku_id": 6085367946775,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子72_v 4500_w25_a_h,75km/h": {
+        "spec_id": "23285e6c09254a760adf43433dd6664d",
+        "spec_attrs": "14\"/12\"轮子72V 4500W25AH,75km/h",
+        "price": "7790.00",
+        "sale_count": 0,
+        "discount_price": "7790.00",
+        "can_book_count": 475,
+        "sku_id": 5917235580851,
+        "is_promotion_sku": false
+      },
+      "17\"/14\"轮子72_v 4500_w25_a_h,75km/h": {
+        "spec_id": "3c58ec8895e81102b47babb23242edb2",
+        "spec_attrs": "17\"/14\"轮子72V 4500W25AH,75km/h",
+        "price": "8890.00",
+        "sale_count": 0,
+        "discount_price": "8890.00",
+        "can_book_count": 473,
+        "sku_id": 5917235580855,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子48_v 2000_w20.4_a_h,50km/h": {
+        "spec_id": "47f2a7a872d38c8ee4fe1ef904b425ae",
+        "spec_attrs": "14\"/12\"轮子48V 2000W20.4AH,50km/h",
+        "price": "4990.00",
+        "sale_count": 0,
+        "discount_price": "4990.00",
+        "can_book_count": 467,
+        "sku_id": 6084307099596,
+        "is_promotion_sku": false
+      },
+      "14\"/12\"轮子48_v 3000_w23.4_a_h,55km/h": {
+        "spec_id": "5684059ebcc3a97ba3d5c947f99ae38e",
+        "spec_attrs": "14\"/12\"轮子48V 3000W23.4AH,55km/h",
+        "price": "5590.00",
+        "sale_count": 0,
+        "discount_price": "5590.00",
+        "can_book_count": 471,
+        "sku_id": 5917235580854,
+        "is_promotion_sku": false
+      }
+    },
+    "sku_price_scale_original": "4990.0-11900.0"
+  },
+  "dropshipping_skus": null,
+  "imageUrls": [
+    "https://cbu01.alicdn.com/img/ibank/O1CN017jq5Mj1xBXsBg1MrS_!!3944176405-0-cib.jpg",
+    "https://cbu01.alicdn.com/img/ibank/O1CN01eiruaf1xBXrPhb3hL_!!3944176405-0-cib.jpg",
+    "https://cbu01.alicdn.com/img/ibank/O1CN01qKSGlq1xBXs5QlBUD_!!3944176405-0-cib.jpg",
+    "https://cbu01.alicdn.com/img/ibank/O1CN01G77Lzc1xBXs96ZOHQ_!!3944176405-0-cib.jpg",
+    "https://cbu01.alicdn.com/img/ibank/O1CN016FpqsU1xBXrRXUyqW_!!3944176405-0-cib.jpg"
+  ]
+}

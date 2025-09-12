@@ -1,0 +1,204 @@
+{
+  "results": [
+    {
+      "content": {
+        "parse_status_code": 12002
+      },
+      "created_at": "2025-08-27 08:26:13",
+      "updated_at": "2025-08-27 08:26:15",
+      "page": 1,
+      "url": "https://detail.1688.com/offer/838905417364.html",
+      "job_id": "7366385540322591745",
+      "is_render_forced": false,
+      "status_code": 200,
+      "type": "parsed",
+      "parser_type": "ecommerce_product",
+      "parser_preset": null,
+      "_request": {
+        "cookies": [],
+        "headers": {
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+          "Connection": "keep-alive",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/116.0",
+          "Sec-Fetch-Dest": "document",
+          "Sec-Fetch-Mode": "navigate",
+          "Sec-Fetch-Site": "same-origin",
+          "Sec-Fetch-User": "?1",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Accept-Language": "en-US,en;q=0.8",
+          "Upgrade-Insecure-Requests": "1"
+        }
+      },
+      "_response": {
+        "cookies": [],
+        "headers": {
+          "Via": "aliswift.033080058224.na610[96,200-0,M], aliswift.033080086252.na620[200]",
+          "s_v": "4.0.4.9",
+          "Date": "Wed, 27 Aug 2025 08:26:15 GMT",
+          "Vary": "Accept-Encoding",
+          "s_ip": "457079564a634d69562b382f4c693874",
+          "s_tag": "283674000031748|136314880^|^^",
+          "s_tid": "213e372c17562831752608850e6d91",
+          "Server": "Tengine/Aserver",
+          "bxuuid": "1b6cc3c3a5f51677953495706d1d64de",
+          "X-Cache": "MISS TCP_MISS dirn:-2:-2",
+          "s_group": "tao-session",
+          "s_ucode": "CN:CENTER",
+          "bxpunish": "1",
+          "s_status": "STATUS_NORMAL",
+          "url-hash": "id=838905417364&detail.1688.com",
+          "Connection": "keep-alive",
+          "ufe-result": "A6",
+          "Content-Type": "text/html;charset=GB18030",
+          "Cache-Control": "no-store",
+          "Content-Encoding": "gzip",
+          "EagleEye-TraceId": "213e372c17562831752608850e6d91",
+          "X-XSS-Protection": "1; mode=block",
+          "Transfer-Encoding": "chunked",
+          "Timing-Allow-Origin": "*",
+          "Strict-Transport-Security": "max-age=31536000",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "session_info": {
+        "id": null,
+        "expires_at": null,
+        "remaining": null
+      }
+    }
+  ],
+  "job": {
+    "callback_url": null,
+    "client_id": 127619,
+    "context": [
+      {
+        "key": "force_headers",
+        "value": false
+      },
+      {
+        "key": "force_cookies",
+        "value": false
+      },
+      {
+        "key": "hc_policy",
+        "value": true
+      },
+      {
+        "key": "successful_status_codes",
+        "value": []
+      },
+      {
+        "key": "follow_redirects",
+        "value": null
+      },
+      {
+        "key": "cookies",
+        "value": []
+      },
+      {
+        "key": "headers",
+        "value": []
+      },
+      {
+        "key": "session_id",
+        "value": null
+      },
+      {
+        "key": "http_method",
+        "value": "get"
+      },
+      {
+        "key": "content",
+        "value": null
+      },
+      {
+        "key": "store_id",
+        "value": null
+      },
+      {
+        "key": "proxy_location",
+        "value": null
+      },
+      {
+        "key": "delivery_location",
+        "value": null
+      },
+      {
+        "key": "fulfillment_type",
+        "value": null
+      }
+    ],
+    "created_at": "2025-08-27 08:26:13",
+    "domain": "com",
+    "geo_location": null,
+    "id": "7366385540322591745",
+    "limit": 10,
+    "locale": null,
+    "pages": 1,
+    "parse": true,
+    "parser_type": "ecommerce_product",
+    "parser_preset": null,
+    "parsing_instructions": null,
+    "browser_instructions": null,
+    "render": "html",
+    "xhr": false,
+    "markdown": false,
+    "url": "https://detail.1688.com/offer/838905417364.html",
+    "query": "",
+    "source": "universal",
+    "start_page": 1,
+    "status": "done",
+    "storage_type": null,
+    "storage_url": null,
+    "subdomain": "detail",
+    "content_encoding": "utf-8",
+    "updated_at": "2025-08-27 08:26:15",
+    "user_agent_type": "desktop",
+    "session_info": null,
+    "statuses": [],
+    "client_notes": null,
+    "_links": [
+      {
+        "rel": "self",
+        "href": "http://data.oxylabs.io/v1/queries/7366385540322591745",
+        "method": "GET"
+      },
+      {
+        "rel": "results",
+        "href": "http://data.oxylabs.io/v1/queries/7366385540322591745/results",
+        "method": "GET"
+      },
+      {
+        "rel": "results-content",
+        "href_list": [
+          "http://data.oxylabs.io/v1/queries/7366385540322591745/results/1/content"
+        ],
+        "method": "GET"
+      },
+      {
+        "rel": "results-html",
+        "href": "http://data.oxylabs.io/v1/queries/7366385540322591745/results?type=raw",
+        "method": "GET"
+      },
+      {
+        "rel": "results-content-html",
+        "href_list": [
+          "http://data.oxylabs.io/v1/queries/7366385540322591745/results/1/content?type=raw"
+        ],
+        "method": "GET"
+      },
+      {
+        "rel": "results-parsed",
+        "href": "http://data.oxylabs.io/v1/queries/7366385540322591745/results?type=parsed",
+        "method": "GET"
+      },
+      {
+        "rel": "results-content-parsed",
+        "href_list": [
+          "http://data.oxylabs.io/v1/queries/7366385540322591745/results/1/content?type=parsed"
+        ],
+        "method": "GET"
+      }
+    ]
+  }
+}

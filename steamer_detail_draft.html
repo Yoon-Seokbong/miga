@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실리콘 찜기 바구니 상세 페이지</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f8f8f8; color: #333; }
+        .container { max-width: 1000px; margin: 20px auto; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; font-size: 2em; font-weight: bold; }
+        .product-section { display: flex; flex-wrap: wrap; padding: 20px; border-bottom: 1px solid #eee; }
+        .product-images { flex: 1; min-width: 300px; margin-right: 20px; }
+        .main-image { width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .thumbnail-gallery { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+        .thumbnail { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.3s; }
+        .thumbnail.active { border-color: #4CAF50; }
+        .product-details { flex: 2; min-width: 400px; }
+        .product-title { font-size: 2.2em; font-weight: bold; margin-bottom: 10px; color: #222; }
+        .product-price { font-size: 1.8em; color: #E91E63; font-weight: bold; margin-bottom: 20px; }
+        .section-title { font-size: 1.8em; font-weight: bold; color: #4CAF50; margin-top: 30px; margin-bottom: 15px; padding-left: 20px; }
+        .content-block { padding: 0 20px 20px; line-height: 1.6; color: #555; }
+        .content-block p { margin-bottom: 1em; }
+        .placeholder-box { background-color: #e0e0e0; padding: 50px 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; color: #777; font-style: italic; }
+        .cta-button { display: block; width: 80%; max-width: 300px; margin: 30px auto; padding: 15px 20px; background-color: #FF9800; color: white; text-align: center; text-decoration: none; border-radius: 50px; font-size: 1.5em; font-weight: bold; transition: background-color 0.3s; }
+        .cta-button:hover { background-color: #F57C00; }
+        .footer { background-color: #333; color: white; text-align: center; padding: 20px; font-size: 0.9em; }
+        @media (max-width: 768px) {
+            .product-section { flex-direction: column; }
+            .product-images { margin-right: 0; margin-bottom: 20px; }
+            .product-details { min-width: unset; }
+            .header, .product-title, .product-price, .section-title { text-align: left; padding-left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="section header-section">
+            <div class="header">
+                건강한 요리의 시작, 실리콘 찜기 바구니!
+            </div>
+        </section>
+
+        <section class="section product-details-section">
+            <div class="product-section">
+                <div class="product-images">
+                    <img src="/uploads/1756798340461-nxi264tyrd-image.jpg" alt="실리콘 찜기 메인 이미지" class="main-image" id="mainProductImage">
+                    <div class="thumbnail-gallery">
+                        <img src="/uploads/1756798340461-nxi264tyrd-image.jpg" alt="썸네일 1" class="thumbnail active" onclick="changeMainImage(this)">
+                        <img src="/uploads/1756798340705-zx9ux3wtpo-image.jpg" alt="썸네일 2" class="thumbnail" onclick="changeMainImage(this)">
+                        <img src="/uploads/1756798340750-nimuqmgbls-image.jpg" alt="썸네일 3" class="thumbnail" onclick="changeMainImage(this)">
+                        <img src="/uploads/1756798340775-zf061dmwzg-image.jpg" alt="썸네일 4" class="thumbnail" onclick="changeMainImage(this)">
+                        <img src="/uploads/1756798340802-k4l9biputrl-image.jpg" alt="썸네일 5" class="thumbnail" onclick="changeMainImage(this)">
+                        <!-- 추가 이미지 필요 시 여기에 img 태그 추가 -->
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h1 class="product-title">맞춤형 한국식 국경 간 주방 실리콘 전자레인지 특수 도구 찜밥솥 지방 감소 가열 찜통 요리 도시락</h1>
+                    <p class="product-price">32원</p>
+                    <div class="content-block">
+                        <p><strong>[제품 설명 - 이 부분은 수동으로 작성해야 합니다.]</strong></p>
+                        <p>이 제품은 건강하고 간편한 요리를 위한 필수 아이템입니다. 전자레인지 사용이 가능하며, 지방 감소 기능으로 더욱 건강한 식사를 즐길 수 있습니다. 내구성이 뛰어난 실리콘 소재로 제작되어 안전하고 위생적입니다.</p>
+                        <p><strong>[추가적인 매력 포인트 작성 공간]</strong></p>
+                        <p>예: 친환경 소재, 간편한 세척, 다양한 요리 활용법 등</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section features-section">
+            <h2 class="section-title">주요 특징</h2>
+            <div class="content-block">
+                <p><strong>[특징 1: 간편한 전자레인지 조리]</strong></p>
+                <p>바쁜 일상 속에서도 빠르고 쉽게 건강한 찜 요리를 즐길 수 있습니다. 전자레인지에 넣고 돌리기만 하면 맛있는 요리가 완성됩니다.</p>
+                <p><strong>[특징 2: 지방 감소 기능]</strong></p>
+                <p>특수 설계된 바닥 구조가 조리 중 발생하는 불필요한 지방을 효과적으로 분리하여, 더욱 담백하고 건강한 식사를 제공합니다. 다이어트나 건강 관리에 최적입니다.</p>
+                <p><strong>[특징 3: 안전한 실리콘 소재]</strong></p>
+                <p>식품 등급의 고품질 실리콘 소재로 제작되어 환경호르몬 걱정 없이 안심하고 사용할 수 있습니다. 뛰어난 내열성으로 고온에서도 안전합니다.</p>
+                <p><strong>[특징 4: 다용도 활용]</strong></p>
+                <p>찜 요리뿐만 아니라 밥, 채소, 고기 등을 데우거나 보관하는 용도로도 활용 가능합니다. 다기능 디자인으로 주방 공간을 효율적으로 사용할 수 있습니다.</p>
+                <p><strong>[특징 5: 쉬운 세척 및 보관]</strong></p>
+                <p>논스틱(Non-stick) 표면으로 음식물이 잘 달라붙지 않아 세척이 매우 간편합니다. 식기세척기 사용도 가능하며, 유연한 소재로 접어서 보관할 수 있어 편리합니다.</p>
+                <!-- 추가 특징이나 상세 설명 이미지 삽입 공간 -->
+                <div class="placeholder-box">
+                    여기에 제품의 상세 기능, 사용 예시, 비교 이미지 등 시각적인 자료를 추가하면 좋습니다.
+                    (예: 사용 전/후 비교, 다양한 요리 활용 사진, 제품 사이즈 상세 이미지 등)
+                </div>
+            </div>
+        </section>
+
+        <section class="section recommendations-section">
+            <h2 class="section-title">이런 분들께 추천합니다!</h2>
+            <div class="content-block">
+                <ul>
+                    <li>건강하고 간편한 식사를 선호하는 분</li>
+                    <li>전자레인지로 빠르고 쉽게 요리하고 싶은 분</li>
+                    <li>지방 섭취를 줄이고 건강한 식단을 유지하고 싶은 분</li>
+                    <li>안전하고 위생적인 주방용품을 찾는 분</li>
+                    <li>다양한 찜 요리를 즐겨 하는 분</li>
+                </ul>
+                <div class="placeholder-box">
+                    여기에 타겟 고객의 공감을 얻을 수 있는 라이프스타일 이미지나 인포그래픽을 추가하면 좋습니다.
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <a href="#" class="cta-button">지금 바로 구매하기!</a>
+        </section>
+
+        <section class="section footer-section">
+            <div class="footer">
+                <p>&copy; 2025 미가 쇼핑몰. 모든 권리 보유.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function changeMainImage(thumbnail) {
+            const mainImage = document.getElementById('mainProductImage');
+            mainImage.src = thumbnail.src;
+
+            // Remove active class from all thumbnails
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach(thumb => thumb.classList.remove('active'));
+
+            // Add active class to the clicked thumbnail
+            thumbnail.classList.add('active');
+        }
+    </script>
+</body>
+</html>

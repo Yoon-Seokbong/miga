@@ -1,0 +1,275 @@
+
+
+C:\Users\emiga\miga-ecommerce-store>npm run build
+
+> miga-ecommerce-store@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.6
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 14.0s
+
+./src/app/admin/categories/page.tsx
+18:10  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/import-product/page.tsx
+52:10  Warning: 'detailImageUrls' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+54:10  Warning: 'translatedMessage' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/orders/page.tsx
+33:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/product-requests/page.tsx
+4:8  Warning: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+30:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/products/page.tsx
+40:20  Warning: 'setPageSize' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/questions/page.tsx
+58:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+69:6  Warning: React Hook useEffect has a missing dependency: 'fetchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/admin/reviews/page.tsx
+47:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+58:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/api/admin/reviews/videos/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/coupons/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/reviews/route.ts
+2:32  Warning: 'ContentStatus' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/toss-webhook/route.ts
+18:59  Warning: 'totalAmount' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/users/addresses/route.ts
+8:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/users/profile/route.ts
+8:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/wishlist/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/auth/login/page.tsx
+14:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/cart/page.tsx
+8:8  Warning: 'InputField' is defined but never used.  @typescript-eslint/no-unused-vars
+12:54  Warning: 'getTotalItems' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+12:84  Warning: 'clearCart' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+48:14  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/checkout/toss/fail/page.tsx
+8:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-account/addresses/page.tsx
+38:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-account/profile/page.tsx
+24:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-orders/page.tsx
+42:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+72:6  Warning: React Hook useEffect has a missing dependency: 'limit'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/my-reviews/page.tsx
+59:6  Warning: React Hook useEffect has a missing dependency: 'fetchMyContent'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/page.tsx
+83:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:26  Warning: 'status' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/products/[productId]/ProductDetailClient.tsx
+4:10  Warning: 'notFound' is defined but never used.  @typescript-eslint/no-unused-vars
+63:19  Warning: 'setProduct' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:18  Warning: 'setVideos' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+74:10  Warning: 'newReviewImagePreviews' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+79:30  Warning: 'setReviewFilterRating' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+80:24  Warning: 'setReviewSortBy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:10  Warning: 'questions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:21  Warning: 'setQuestions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+84:10  Warning: 'newQuestionText' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+84:27  Warning: 'setNewQuestionText' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+85:10  Warning: 'questionLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+85:27  Warning: 'setQuestionLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+86:10  Warning: 'questionError' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+86:25  Warning: 'setQuestionError' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+120:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+124:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/products/[productId]/ProductQuestions.tsx
+51:6  Warning: React Hook useEffect has a missing dependency: 'fetchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/products/[productId]/ProductReviews.tsx
+35:10  Warning: 'newReviewImagePreviews' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+40:30  Warning: 'setReviewFilterRating' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+41:24  Warning: 'setReviewSortBy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+65:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/WishlistButton.tsx
+16:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/context/WishlistContext.tsx
+32:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/types/next-auth.d.ts
+1:8  Warning: 'NextAuth' is defined but never used.  @typescript-eslint/no-unused-vars
+2:10  Warning: 'JWT' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+Failed to compile.
+
+.next/types/app/api/admin/reviews/[id]/status/route.ts:205:7
+Type error: Type '{ __tag__: "PUT"; __param_position__: "second"; __param_type__: { params: { id: string; }; }; }' does not satisfy the constraint 'ParamCheck<RouteContext>'.
+  The types of '__param_type__.params' are incompatible between these types.
+    Type '{ id: string; }' is missing the following properties from type 'Promise<any>': then, catch, finally, [Symbol.toStringTag]
+
+  203 |     Diff<
+  204 |       ParamCheck<RouteContext>,
+> 205 |       {
+      |       ^
+  206 |         __tag__: 'PUT'
+  207 |         __param_position__: 'second'
+  208 |         __param_type__: SecondArg<MaybeField<TEntry, 'PUT'>>
+Next.js build worker exited with code: 1 and signal: null
+
+C:\Users\emiga\miga-ecommerce-store>
+
+C:\Users\emiga\miga-ecommerce-store>npm run build
+
+> miga-ecommerce-store@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.6
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 12.0s
+
+Failed to compile.
+
+./src/app/admin/categories/page.tsx
+18:10  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/import-product/page.tsx
+52:10  Warning: 'detailImageUrls' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+54:10  Warning: 'translatedMessage' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/orders/page.tsx
+33:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/product-requests/page.tsx
+4:8  Warning: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+30:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/products/page.tsx
+40:20  Warning: 'setPageSize' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/admin/questions/page.tsx
+58:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+69:6  Warning: React Hook useEffect has a missing dependency: 'fetchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/admin/reviews/page.tsx
+47:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+58:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/api/admin/reviews/videos/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/admin/reviews/[id]/status/route.ts
+8:54  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/api/coupons/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/reviews/route.ts
+2:32  Warning: 'ContentStatus' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/toss-webhook/route.ts
+18:59  Warning: 'totalAmount' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/users/addresses/route.ts
+8:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/users/profile/route.ts
+8:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/wishlist/route.ts
+9:27  Warning: 'request' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/auth/login/page.tsx
+14:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/cart/page.tsx
+8:8  Warning: 'InputField' is defined but never used.  @typescript-eslint/no-unused-vars
+12:54  Warning: 'getTotalItems' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+12:84  Warning: 'clearCart' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+48:14  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/checkout/toss/fail/page.tsx
+8:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-account/addresses/page.tsx
+38:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-account/profile/page.tsx
+24:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-orders/page.tsx
+42:17  Warning: 'setLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+72:6  Warning: React Hook useEffect has a missing dependency: 'limit'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/my-reviews/page.tsx
+59:6  Warning: React Hook useEffect has a missing dependency: 'fetchMyContent'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/page.tsx
+83:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:26  Warning: 'status' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/products/[productId]/ProductDetailClient.tsx
+4:10  Warning: 'notFound' is defined but never used.  @typescript-eslint/no-unused-vars
+63:19  Warning: 'setProduct' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+64:18  Warning: 'setVideos' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+74:10  Warning: 'newReviewImagePreviews' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+79:30  Warning: 'setReviewFilterRating' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+80:24  Warning: 'setReviewSortBy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:10  Warning: 'questions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+83:21  Warning: 'setQuestions' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+84:10  Warning: 'newQuestionText' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+84:27  Warning: 'setNewQuestionText' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+85:10  Warning: 'questionLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+85:27  Warning: 'setQuestionLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+86:10  Warning: 'questionError' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+86:25  Warning: 'setQuestionError' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+120:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+124:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/products/[productId]/ProductQuestions.tsx
+51:6  Warning: React Hook useEffect has a missing dependency: 'fetchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/products/[productId]/ProductReviews.tsx
+35:10  Warning: 'newReviewImagePreviews' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+40:30  Warning: 'setReviewFilterRating' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+41:24  Warning: 'setReviewSortBy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+65:6  Warning: React Hook useEffect has a missing dependency: 'fetchReviews'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/WishlistButton.tsx
+16:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/context/WishlistContext.tsx
+32:17  Warning: 'session' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/types/next-auth.d.ts
+1:8  Warning: 'NextAuth' is defined but never used.  @typescript-eslint/no-unused-vars
+2:10  Warning: 'JWT' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+C:\Users\emiga\miga-ecommerce-store>

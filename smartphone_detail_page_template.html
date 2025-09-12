@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC 스마트폰 - 상세 페이지 V2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        .section {
+            padding: 80px 40px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .hero {
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 900;
+            margin: 0 0 10px;
+            color: #1a1a1a;
+            letter-spacing: -2.5px;
+        }
+
+        .hero .subtitle {
+            font-size: 24px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            margin: 40px 0;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .quick-buy-link {
+            font-size: 16px;
+            font-weight: 700;
+            color: #555;
+            text-decoration: none;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 3px;
+            transition: color 0.3s;
+        }
+        .quick-buy-link:hover {
+            color: #007bff;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #222;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: #666;
+            max-width: 650px;
+            margin: 0 auto 60px;
+        }
+
+        .story-item {
+            margin-bottom: 80px;
+        }
+        .story-item:last-child {
+            margin-bottom: 0;
+        }
+        .story-item img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .social-proof {
+            background-color: #f9f9f9;
+        }
+
+        .review-box {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .review-box .stars {
+            color: #ffc107;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .review-box .author {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .specs-table {
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .specs-table th, .specs-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .specs-table th {
+            background-color: #f9f9f9;
+            font-weight: 700;
+            width: 30%;
+        }
+
+        .final-cta {
+            background: linear-gradient(to top, #eef4ff, #ffffff);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ====================
+        [V2] Hook (시선 집중) + 상단 CTA
+        ===================== -->
+        <div class="section hero">
+            <div class="brand-name" style="font-weight:700; color:#888;">ABC Electronics</div>
+            <h1>새로운 시대를 여는, ABC 스마트폰</h1>
+            <p class="subtitle">당신의 일상을 혁신하는 단 하나의 마스터피스</p>
+            <img src="/placeholder-product.png" alt="ABC 스마트폰 메인 이미지" class="main-image">
+            <div class="price">1,200,000원</div>
+            <a href="#final-cta" class="quick-buy-link">빠른 구매를 원하시면 클릭</a>
+        </div>
+
+        <!-- ====================
+        [V2] Story (서브카피 + 이미지)
+        ===================== -->
+        <div class="section story">
+            <div class="story-item">
+                <h2 class="section-title">혹시, 이런 순간 없으셨나요?</h2>
+                <p class="section-subtitle">결정적인 순간에 버벅이는 스마트폰, 하루도 채 가지 못하는 배터리...<br>이제 사소한 불편함들과 작별을 고할 시간입니다.</p>
+                <img src="https://placehold.co/800x400/f1f1f1/c7c7c7?text=Stressed+Person" alt="기존 스마트폰의 불편함">
+            </div>
+
+            <div class="story-item">
+                <h2 class="section-title">ABC 스마트폰이 모든 것을 바꿉니다</h2>
+                <p class="section-subtitle">최첨단 기술을 집약하여 당신의 모든 순간을 특별하게 만듭니다.</p>
+                <img src="https://placehold.co/800x500/e0f7ff/333?text=Amazing+Features" alt="ABC 스마트폰의 놀라운 기능">
+            </div>
+        </div>
+
+        <!-- ====================
+        [V2] Advantages (제품의 장점)
+        ===================== -->
+        <div class="section features">
+            <h2 class="section-title">당신이 원하던 바로 그 기능</h2>
+            <p class="section-subtitle">사용자 경험 연구를 통해 가장 필요하고 원하는 기능만을 담았습니다.</p>
+            <div class="features-grid" style="display: block; text-align: left; max-width: 600px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                    <div style="font-size: 48px; margin-right: 25px;">📷</div>
+                    <div>
+                        <h3 style="margin:0; font-size:22px;">AI 스튜디오 카메라</h3>
+                        <p style="margin:0; color: #555;">어떤 환경에서도 전문가 수준의 사진과 영상을 촬영하세요.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                    <div style="font-size: 48px; margin-right: 25px;">🔋</div>
+                    <div>
+                        <h3 style="margin:0; font-size:22px;">올데이-플러스 배터리</h3>
+                        <p style="margin:0; color: #555;">단 한 번의 충전으로 온종일. 배터리 걱정은 잊으세요.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                    <div style="font-size: 48px; margin-right: 25px;">⚡️</div>
+                    <div>
+                        <h3 style="margin:0; font-size:22px;">퀀텀코어™ 프로세서</h3>
+                        <p style="margin:0; color: #555;">기다림 없는 압도적인 퍼포먼스를 경험할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================
+        [V2] Reviews (고객 리뷰)
+        ===================== -->
+        <div class="section social-proof">
+            <h2 class="section-title">먼저 경험한 분들이 증명합니다</h2>
+            <p class="section-subtitle">수많은 사용자들의 찬사. 당신도 곧 주인공이 될 수 있습니다.</p>
+            <div class="review-box">
+                <div class="stars">★★★★★</div>
+                <p>"인생 스마트폰을 만났습니다. 속도, 카메라, 디자인 뭐 하나 빠지는 게 없네요. 특히 배터리가 정말 오래가서 너무 편해요!"</p>
+                <p class="author">- 김**님</p>
+            </div>
+            <div class="review-box">
+                <div class="stars">★★★★★</div>
+                <p>"사진이 정말 예술처럼 나와요. 예전 폰으로는 상상도 못했던 퀄리티! 주변 사람들이 다들 뭐로 찍었냐고 물어봐요."
+                </p>
+                <p class="author">- 이**님</p>
+            </div>
+        </div>
+
+        <!-- ====================
+        [V2] Detailed Spec (상세 스펙)
+        ===================== -->
+        <div class="section specs">
+            <h2 class="section-title">상세 사양</h2>
+            <table class="specs-table">
+                <tbody>
+                    <tr><th>모델명</th><td>ABC Smartphone (ABC-001)</td></tr>
+                    <tr><th>브랜드</th><td>ABC</td></tr>
+                    <tr><th>프로세서</th><td>퀀텀코어™ 옥타코어 프로세서</td></tr>
+                    <tr><th>디스플레이</th><td>6.7인치 Super Dynamic AMOLED 2X</td></tr>
+                    <tr><th>카메라</th><td>108MP 광각, 12MP 초광각, 10MP 망원</td></tr>
+                    <tr><th>배터리</th><td>5,000mAh</td></tr>
+                    <tr><th>가격</th><td>1,200,000원</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ====================
+        [V2] Final CTA (최종 구매 버튼)
+        ===================== -->
+        <div class="section final-cta" id="final-cta">
+            <h2 class="section-title">이제, 당신의 차례입니다</h2>
+            <p class="section-subtitle">최고의 선택, ABC 스마트폰으로<br>한 단계 더 진화한 일상을 경험해보세요.</p>
+            <a href="#" class="cta-button">지금 바로 구매하기</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
