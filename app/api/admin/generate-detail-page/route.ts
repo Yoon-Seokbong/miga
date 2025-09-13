@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         const specThStyle = "background-color: #f2f2f2; border: 1px solid #ddd; padding: 12px; text-align: left;";
         const specTdStyle = "border: 1px solid #ddd; padding: 12px; text-align: left;";
         const ctaSectionStyle = "text-align: center; padding: 80px 20px; background-color: #f5f5f5;";
-        const ctaButtonStyle = "background-color: #ff5722; color: white; padding: 20px 40px; border: none; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; text-decoration: none;";
+        const ctaButtonStyle = "background-color: #ff5722; color: white; padding: 35px 80px; border: none; border-radius: 60px; font-size: 40px; font-weight: 900; cursor: pointer; text-decoration: none;";
 
         // Build the HTML using the AI-generated text content and inline styles
         let bodyContent = '';
