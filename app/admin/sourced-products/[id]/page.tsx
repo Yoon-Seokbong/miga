@@ -107,9 +107,10 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         setDetailContent(prev => prev + newImgTag);
       }
     } catch (err) {
+      setIsUploading(false); // Move this up
       alert(`업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
-      setIsUploading(false);
+      // It's already false, but keep it for consistency
     }
     event.target.value = '';
   };
@@ -132,10 +133,11 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         setSelectedImage(newUrl);
       }
     } catch (err) {
-      alert(`이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
       setIsUploading(false);
       setImageToReplace(null);
+      alert(`이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      // It's already false, but keep it for consistency
     }
     event.target.value = '';
   };
