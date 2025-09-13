@@ -103,6 +103,8 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       for (const file of Array.from(files)) {
         const newUrl = await uploadFile(file);
         setEditableImages(prev => [...prev, { url: newUrl }]);
+        const newImgTag = `<p><img src="${newUrl}" style="max-width: 860px; width: 100%; height: auto; display: block; margin: 2.5rem auto;" alt="추가된 이미지" /></p>`;
+        setDetailContent(prev => prev + newImgTag);
       }
     } catch (err) {
       alert(`업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
