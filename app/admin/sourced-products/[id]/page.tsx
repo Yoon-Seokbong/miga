@@ -5,17 +5,26 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
-import { ArrowLeft, LoaderCircle, Save, Trash2, UploadCloud, PlusSquare, Replace } from 'lucide-react';
+import { ArrowLeft, LoaderCircle, Save, Trash2, UploadCloud, PlusSquare, Replace, Download } from 'lucide-react';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 interface SourcedProduct {
   id: string;
   translatedName: string | null;
+  translatedDescription?: string | null; // Add this to capture original description
   localPrice: number | null;
   images: { url: string }[];
   videos: { url: string }[];
   detailContent: string | null;
+  categoryId?: string;
+  stock?: number;
+  tags?: string;
+}
+
+interface Category {
+    id: string;
+    name: string;
 }
 
 const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
@@ -25,11 +34,12 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   const replaceFileInputRef = useRef<HTMLInputElement>(null);
 
   const [product, setProduct] = useState<SourcedProduct | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [editableImages, setEditableImages] = useState<{ url: string }[]>([]);
   const [detailContent, setDetailContent] = useState('');
   const [imageToReplace, setImageToReplace] = useState<string | null>(null);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -37,43 +47,77 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (!id) return;
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/sourced-products/${id}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch product details');
-        const productData = await res.json();
-        setProduct(productData);
+        const [productRes, categoriesRes] = await Promise.all([
+          fetch(`/api/sourced-products/${id}`, { cache: 'no-store' }),
+          fetch('/api/categories'),
+        ]);
+
+        if (!productRes.ok) throw new Error('Failed to fetch product details');
+        const productData = await productRes.json();
         
+        if(categoriesRes.ok) {
+            const categoriesData = await categoriesRes.json();
+            setCategories(categoriesData || []);
+        }
+
+        // Ensure productData.stock is not null for the input
+        const initialProduct = {
+          ...productData,
+          stock: productData.stock ?? 0,
+        };
+        setProduct(initialProduct);
+
         const initialImages = productData.images || [];
         setEditableImages(initialImages);
         if (initialImages.length > 0) {
           setSelectedImage(initialImages[0].url);
         }
 
-        let processedHtml = productData.detailContent || '';
-        if (processedHtml && initialImages.length > 0) {
-            const correctImageUrls = initialImages.map(img => img.url);
-            let imageIndex = 0;
-            processedHtml = processedHtml.replace(/<img[^>]*>/g, () => {
-                if (imageIndex < correctImageUrls.length) {
-                    const correctUrl = correctImageUrls[imageIndex];
-                    imageIndex++;
-                    return `<img src="${correctUrl}" style="max-width: 860px; width: 100%; height: auto; display: block; margin: 2.5rem auto;">`;
-                }
-                return '';
-            });
-        }
-        setDetailContent(processedHtml);
+        setDetailContent(productData.detailContent || '');
 
       } catch (err) {
         console.error(err);
+        alert(`데이터 불러오기 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchData();
   }, [id]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProduct(prev => {
+      if (!prev) return null;
+      const newValue = (name === 'localPrice' || name === 'stock') ? (value === '' ? null : Number(value)) : value;
+      return {
+        ...prev,
+        [name]: newValue,
+      };
+    });
+  };
+
+  const handleDownloadImage = (url: string) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = blobUrl;
+        a.download = url.split('/').pop() || 'download';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(blobUrl);
+        document.body.removeChild(a);
+      })
+      .catch(() => alert('이미지를 다운로드하는 데 실패했습니다.'));
+  };
 
   const uploadFile = async (file: File): Promise<string> => {
     const formData = new FormData();
@@ -85,12 +129,13 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   }
 
   const handleDeleteImage = (urlToDelete: string) => {
-    setEditableImages(prev => prev.filter(image => image.url !== urlToDelete));
+    const remainingImages = editableImages.filter(image => image.url !== urlToDelete);
+    setEditableImages(remainingImages);
     if (selectedImage === urlToDelete) {
-      setSelectedImage(editableImages.length > 1 ? editableImages.find(img => img.url !== urlToDelete)?.url || null : null);
+      setSelectedImage(remainingImages.length > 0 ? remainingImages[0].url : null);
     }
     setDetailContent(prevContent => {
-        const imgTagRegex = new RegExp(`<img[^>]*src=["']${urlToDelete}["'][^>]*>`, 'g');
+        const imgTagRegex = new RegExp(`<img[^>]*src="${urlToDelete}"[^>]*>`, 'g');
         return prevContent.replace(imgTagRegex, '');
     });
   };
@@ -106,11 +151,11 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         const newImgTag = `<p><img src="${newUrl}" style="max-width: 860px; width: 100%; height: auto; display: block; margin: 2.5rem auto;" alt="추가된 이미지" /></p>`;
         setDetailContent(prev => prev + newImgTag);
       }
+      alert('이미지 추가 성공!');
     } catch (err) {
-      setIsUploading(false); // Move this up
       alert(`업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
-      // It's already false, but keep it for consistency
+      setIsUploading(false);
     }
     event.target.value = '';
   };
@@ -132,18 +177,73 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       if (selectedImage === oldUrl) {
         setSelectedImage(newUrl);
       }
+      alert('이미지 교체 성공!');
     } catch (err) {
-      setIsUploading(false);
-      setImageToReplace(null);
       alert(`이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
-      // It's already false, but keep it for consistency
+      setIsUploading(false);
+      setImageToReplace(null);
     }
     event.target.value = '';
   };
 
-  const handleSaveChanges = async () => { /* ... */ };
-  const handleRegisterProduct = async () => { /* ... */ };
+  const handleSaveChanges = async () => {
+    if (!product) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch(`/api/sourced-products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...product,
+          images: editableImages,
+          detailContent: detailContent,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to save changes');
+      }
+      alert('변경사항이 성공적으로 저장되었습니다!');
+    } catch (err) {
+      alert(`변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRegisterProduct = async () => {
+    if (!product) return;
+    setIsRegistering(true);
+    try {
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: product.translatedName,
+          description: product.translatedDescription, 
+          price: product.localPrice,
+          images: editableImages,
+          detailContent: detailContent,
+          categoryId: product.categoryId,
+          stock: product.stock,
+          tags: product.tags,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to register product');
+      }
+      alert('상품이 최종 등록되었습니다!');
+      router.push('/admin/products');
+    } catch (err) {
+      alert(`상품 등록 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+    } finally {
+      setIsRegistering(false);
+    }
+  };
 
   const quillModules = useMemo(() => ({
     toolbar: [
@@ -158,74 +258,104 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   if (!product) return <div className="p-6">상품을 찾을 수 없습니다.</div>;
 
   return (
-    <>
-      <style jsx global>{`
-        .frameless-editor .ql-toolbar.ql-snow {
-          border: 1px solid #e5e7eb;
-          border-radius: 0.5rem;
-          background-color: #f9fafb;
-          margin-bottom: 1.5rem;
-        }
-        .frameless-editor .ql-container.ql-snow {
-          border: none;
-        }
-        .frameless-editor .ql-editor {
-          font-size: 1.125rem !important; /* 18px */
-          line-height: 1.75;
-          color: #1f2937;
-          padding: 0;
-        }
-        .frameless-editor .ql-editor p {
-          font-size: 1.125rem !important; /* Enforce font size for paragraphs */
-          margin-top: 0; /* Prevent double margin */
-          margin-bottom: 1.25em;
-        }
-        .frameless-editor .ql-editor h1,
-        .frameless-editor .ql-editor h2,
-        .frameless-editor .ql-editor h3 {
-          font-weight: 700;
-          margin-top: 2.5em;
-          margin-bottom: 1em;
-          padding-bottom: 0;
-          border-bottom: none;
-        }
-        .frameless-editor .ql-editor h1 {
-          font-size: 2.25rem !important;
-        }
-        .frameless-editor .ql-editor h2 {
-          font-size: 1.875rem !important;
-        }
-        .frameless-editor .ql-editor h3 {
-          font-size: 1.5rem !important;
-        }
-      `}</style>
+    <div>
       <div className="bg-gray-100 min-h-screen">
         <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm shadow-md p-2 flex justify-between items-center">
           <button onClick={() => router.back()} className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><ArrowLeft className="mr-2 h-4 w-4" />목록으로</button>
           <h1 className="text-lg font-semibold truncate mx-4 flex-1">{product.translatedName || '상품 상세 정보'}</h1>
           <div className="flex items-center gap-2">
-            <button onClick={handleSaveChanges} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50"><LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isSaving && 'hidden'}`} /><Save className={`mr-2 h-5 w-5 ${isSaving && 'hidden'}`} />변경사항 저장</button>
-            <button onClick={handleRegisterProduct} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"><LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isRegistering && 'hidden'}`} /><UploadCloud className={`mr-2 h-5 w-5 ${isRegistering && 'hidden'}`} />최종 상품 등록</button>
+            <button onClick={handleSaveChanges} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">
+              <LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isSaving && 'hidden'}`} />
+              <Save className={`mr-2 h-5 w-5 ${isSaving && 'hidden'}`} />
+              변경사항 저장
+            </button>
+            <button onClick={handleRegisterProduct} disabled={isSaving || isRegistering || isUploading || !detailContent || !product?.translatedName || !product?.localPrice || !product?.categoryId || product.stock === undefined} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">
+              <LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isRegistering && 'hidden'}`} />
+              <UploadCloud className={`mr-2 h-5 w-5 ${isRegistering && 'hidden'}`} />
+              최종 상품 등록
+            </button>
           </div>
         </header>
 
         <main className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
             <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">기본 정보</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="lg:col-span-2">
+                  <label htmlFor="translatedName" className="block text-sm font-medium text-gray-700">상품명</label>
+                  <input
+                    type="text"
+                    name="translatedName"
+                    id="translatedName"
+                    value={product?.translatedName || ''}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="번역된 상품명을 입력하세요"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="localPrice" className="block text-sm font-medium text-gray-700">판매가 (원)</label>
+                  <input
+                    type="number"
+                    name="localPrice"
+                    id="localPrice"
+                    value={product?.localPrice || ''}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="판매 가격을 입력하세요"
+                  />
+                </div>
+                 <div>
+                  <label htmlFor="stock" className="block text-sm font-medium text-gray-700">재고</label>
+                  <input
+                    type="number"
+                    name="stock"
+                    id="stock"
+                    value={product?.stock || ''}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="재고 수량을 입력하세요"
+                  />
+                </div>
+                <div className="lg:col-span-4">
+                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700">카테고리</label>
+                    <select
+                        id="categoryId"
+                        name="categoryId"
+                        value={product?.categoryId || ''}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    >
+                        <option value="">카테고리를 선택하세요</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                    </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">이미지 갤러리 (편집)</h2>
               <div className="flex flex-col items-center">
                 <div className="w-full max-w-[1000px] h-auto mb-4 border rounded-lg overflow-hidden">
-                  {selectedImage ? <Image src={selectedImage} alt="대표 이미지" width={1000} height={1000} className="w-full h-auto object-contain" priority /> : <div className="w-full h-[500px] bg-gray-200 flex items-center justify-center text-gray-500">이미지가 없습니다.</div>}
+                  {selectedImage ? (
+                    <Image src={selectedImage} alt="Main Image" width={1000} height={1000} className="w-full h-auto object-contain" priority />
+                  ) : (
+                    <div className="w-full h-[500px] bg-gray-200 flex items-center justify-center text-gray-500">이미지가 없습니다.</div>
+                  )}
                 </div>
                 <div className="flex flex-wrap justify-center gap-2">
                   {editableImages.map((image) => (
-                    <div key={image.url} className={`w-24 h-24 relative group`}>
+                    <div key={image.url} className="w-24 h-24 relative group">
                       <div className={`w-full h-full relative cursor-pointer border-2 rounded-md overflow-hidden ${selectedImage === image.url ? 'border-indigo-500' : 'border-transparent'}`} onClick={() => setSelectedImage(image.url)}>
-                        <Image src={image.url} alt={`썸네일`} layout="fill" objectFit="cover" />
+                        <Image src={image.url} alt="Thumbnail" layout="fill" objectFit="cover" />
                       </div>
                       <div className="absolute top-0 right-0 flex flex-col gap-1 m-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleDeleteImage(image.url)} className="bg-red-600 text-white rounded-full p-1"><Trash2 className="h-3 w-3" /></button>
-                        <button onClick={() => handleReplaceImageClick(image.url)} className="bg-blue-600 text-white rounded-full p-1"><Replace className="h-3 w-3" /></button>
+                        <button onClick={() => handleDownloadImage(image.url)} className="bg-green-500 text-white rounded-full p-1 hover:bg-green-600"><Download className="h-3 w-3" /></button>
+                        <button onClick={() => handleReplaceImageClick(image.url)} className="bg-blue-600 text-white rounded-full p-1 hover:bg-blue-700"><Replace className="h-3 w-3" /></button>
+                        <button onClick={() => handleDeleteImage(image.url)} className="bg-red-600 text-white rounded-full p-1 hover:bg-red-700"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     </div>
                   ))}
@@ -244,7 +374,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
           </div>
         </main>
       </div>
-    </>
+    </div>
   );
 };
 

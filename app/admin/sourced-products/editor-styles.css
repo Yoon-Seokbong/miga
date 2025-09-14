@@ -1,0 +1,38 @@
+          .frameless-editor .ql-toolbar.ql-snow {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            margin-bottom: 1.5rem;
+          }
+          .frameless-editor .ql-container.ql-snow {
+            border: none;
+          }
+          .frameless-editor .ql-editor {
+            font-size: 1.125rem !important;
+            line-height: 1.75;
+            color: #1f2937;
+            padding: 0;
+          }
+          .frameless-editor .ql-editor p {
+            font-size: 1.125rem !important;
+            margin-top: 0;
+            margin-bottom: 1.25em;
+          }
+          .frameless-editor .ql-editor h1,
+          .frameless-editor .ql-editor h2,
+          .frameless-editor .ql-editor h3 {
+            font-weight: 700;
+            margin-top: 2.5em;
+            margin-bottom: 1em;
+            padding-bottom: 0;
+            border-bottom: none;
+          }
+          .frameless-editor .ql-editor h1 {
+            font-size: 2.25rem !important;
+          }
+          .frameless-editor .ql-editor h2 {
+            font-size: 1.875rem !important;
+          }
+          .frameless-editor .ql-editor h3 {
+            font-size: 1.5rem !important;
+          }

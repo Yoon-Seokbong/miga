@@ -54,7 +54,7 @@ const EditSourcedProductPage = () => {
           setDetailContent(detailContent || '');
 
           // --- NEW LOG FOR DIRECT URLS ---
-          console.log('--- IMAGE URLS FOR DIRECT TEST ---', productData.images.map((img: any) => img.url));
+          console.log('--- IMAGE URLS FOR DIRECT TEST ---', productData.images?.map((img: any) => img.url));
 
         } catch (err) {
           setError(err instanceof Error ? err.message : 'An unknown error occurred');

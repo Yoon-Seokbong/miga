@@ -125,25 +125,59 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const formData = await request.formData();
+    const contentType = request.headers.get('content-type') || '';
 
+    // Handle JSON body for registering sourced products
+    if (contentType.includes('application/json')) {
+      const { name, description, price, images, detailContent, categoryId, stock, brand, tags } = await request.json();
+
+      if (!name || !price || !categoryId || stock === undefined) {
+        return NextResponse.json({ message: 'Name, price, category, and stock are required for JSON input' }, { status: 400 });
+      }
+
+      const product = await prisma.product.create({
+        data: {
+          name,
+          description,
+          price,
+          stock,
+          brand,
+          tags: tags ? tags.split(',').map(tag => tag.trim()).join(',') : '',
+          categoryId,
+          detailContent, // Save the rich HTML content
+          images: {
+            create: images, // Expects an array of { url: string }
+          },
+        },
+        include: {
+          images: true,
+        },
+      });
+      return NextResponse.json({ message: 'Product created successfully from JSON', product }, { status: 201 });
+    }
+
+    // Handle FormData for creating new products from scratch
+    const formData = await request.formData();
     const name = formData.get('name')?.toString();
     const description = formData.get('description')?.toString();
     const priceString = formData.get('price')?.toString() || '0';
-    const cleanedPriceString = priceString.replace(/,/g, ''); // Remove commas
+    const cleanedPriceString = priceString.replace(/,/g, '');
     const price = parseFloat(cleanedPriceString);
     const stock = parseInt(formData.get('stock')?.toString() || '0');
     const brand = formData.get('brand')?.toString();
     const tags = formData.get('tags')?.toString();
     const categoryId = formData.get('categoryId')?.toString();
+    const detailContentFromForm = formData.get('detailContent')?.toString();
 
-    // Handle image uploads
     const imageFiles = formData.getAll('images') as File[];
-    const detailImageFiles = formData.getAll('detailImages') as File[];
     const videoFiles = formData.getAll('videos') as File[];
 
+    if (!name || !price || !categoryId || !stock) {
+      return NextResponse.json({ message: 'Name, price, category, and stock are required for form input' }, { status: 400 });
+    }
+
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    await fs.mkdir(uploadDir, { recursive: true }); // Ensure uploads directory exists
+    await fs.mkdir(uploadDir, { recursive: true });
 
     const uploadedImageUrls: { url: string }[] = [];
     for (const file of imageFiles) {
@@ -156,17 +190,6 @@ export async function POST(request: Request) {
       uploadedImageUrls.push({ url: `/uploads/${filename}` });
     }
 
-    const uploadedDetailImageUrls: { url: string, order: number }[] = [];
-    for (let i = 0; i < detailImageFiles.length; i++) {
-      const file = detailImageFiles[i];
-      if (file.size === 0) continue;
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const filename = `${Date.now()}-detail-${file.name}`;
-      const filePath = path.join(uploadDir, filename);
-      await fs.writeFile(filePath, buffer);
-      uploadedDetailImageUrls.push({ url: `/uploads/${filename}`, order: i });
-    }
-
     const uploadedVideoUrls: { url: string }[] = [];
     for (const file of videoFiles) {
       if (file.size === 0) continue;
@@ -175,10 +198,6 @@ export async function POST(request: Request) {
       const filePath = path.join(uploadDir, filename);
       await fs.writeFile(filePath, buffer);
       uploadedVideoUrls.push({ url: `/uploads/${filename}` });
-    }
-
-    if (!name || !price || !categoryId || !stock) {
-      return NextResponse.json({ message: 'Name, price, category, and stock are required' }, { status: 400 });
     }
 
     const product = await prisma.product.create({
@@ -190,11 +209,9 @@ export async function POST(request: Request) {
         brand,
         tags: tags ? tags.split(',').map(tag => tag.trim()).join(',') : '',
         categoryId,
+        detailContent: detailContentFromForm, // Use detailContent from form
         images: {
           create: uploadedImageUrls,
-        },
-        detailImages: {
-          create: uploadedDetailImageUrls,
         },
         videos: {
           create: uploadedVideoUrls,
@@ -202,12 +219,11 @@ export async function POST(request: Request) {
       },
       include: {
         images: true,
-        detailImages: true,
         videos: true,
       },
     });
 
-    return NextResponse.json({ message: 'Product created successfully', product }, { status: 201 });
+    return NextResponse.json({ message: 'Product created successfully from FormData', product }, { status: 201 });
 
   } catch (error) {
     console.error('Error creating product:', error);

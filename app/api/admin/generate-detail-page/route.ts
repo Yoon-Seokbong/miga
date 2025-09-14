@@ -91,10 +91,11 @@ export async function POST(request: NextRequest) {
         let bodyContent = '';
         for (let i = 0; i < 5; i++) {
             if (aiJson.headlines[i] && aiJson.subcopies[i] && productData.images[i]) {
+                const imageUrl = typeof productData.images[i] === 'string' ? productData.images[i] : (productData.images[i] as { url: string }).url;
                 bodyContent += `
                     <h2 style="${headCopyStyle}">${aiJson.headlines[i]}</h2>
                     <p style="${subCopyStyle}">${aiJson.subcopies[i]}</p>
-                    <img style="${bodyImageStyle}" src="${productData.images[i].url}" alt="${aiJson.headlines[i]}">
+                    <img style="${bodyImageStyle}" src="${imageUrl}" alt="${aiJson.headlines[i]}">
                 `;
             }
         }

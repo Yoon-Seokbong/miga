@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoaderCircle, Save, Sparkles, ArrowLeft } from 'lucide-react';
-import parse from 'html-react-parser';
-import Image from 'next/image'; // Import Next.js Image component
+import dynamic from 'next/dynamic';
+import 'react-quill-new/dist/quill.snow.css';
 
 interface SourcedProduct {
   id: string;
@@ -29,33 +29,38 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const ReactQuill = useMemo(() => dynamic(() => import('react-quill-new'), { ssr: false }), []);
 
   useEffect(() => {
     if (!id) return;
+    const fetchProductData = async () => {
+        setIsLoading(true);
+        try {
+          const res = await fetch(`/api/sourced-products/${id}`, { cache: 'no-store' });
+          if (!res.ok) throw new Error('Failed to fetch product details');
+          const productData = await res.json();
+          setProduct(productData);
+          setGeneratedDetailContent(productData.detailContent || '');
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        } finally {
+          setIsLoading(false);
+        }
+      };
     fetchProductData();
   }, [id]);
-
-  const fetchProductData = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch(`/api/sourced-products/${id}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('Failed to fetch product details');
-      const productData = await res.json();
-      setProduct(productData);
-      setGeneratedDetailContent(productData.detailContent || ''); // Load existing AI content if any
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGenerateAiContent = async () => {
     if (!product) return;
     setIsGenerating(true);
     setError(null);
     try {
-      console.log('Images being sent to AI API:', product.images);
       const res = await fetch('/api/admin/generate-detail-page', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,10 +68,10 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
           productId: product.id,
           name: product.translatedName,
           description: product.translatedDescription,
-          images: product.images, // Pass images to AI API
-          sourcePlatform: '1688', // Assuming 1688 for now
+          images: product.images,
+          sourcePlatform: '1688',
           price: product.localPrice,
-          attributes: {}, // Assuming attributes are not directly used by AI for now
+          attributes: {},
         }),
       });
 
@@ -75,7 +80,7 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
         throw new Error(errorData.message || 'Failed to generate AI content');
       }
 
-      const htmlContent = await res.text(); // API returns HTML directly
+      const htmlContent = await res.text();
       setGeneratedDetailContent(htmlContent);
       alert('AI 상세페이지 내용이 성공적으로 생성되었습니다!');
 
@@ -105,8 +110,7 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
       }
 
       alert('상세페이지 내용이 성공적으로 저장되었습니다!');
-      // Optionally, navigate back or refresh product data
-      fetchProductData();
+      router.refresh(); 
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
@@ -149,38 +153,17 @@ const EditAiDetailPage = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <div className="prose max-w-none">
-        {generatedDetailContent ? (
-          parse(generatedDetailContent, {
-            replace: (node) => {
-              if (node.type === 'tag' && node.name === 'img') {
-                const { src, alt, width, height, style } = node.attribs;
-                // Attempt to parse width/height from style or use defaults
-                const parsedWidth = style && style.match(/width:\s*(\d+)px/)?.[1] ? parseInt(style.match(/width:\s*(\d+)px/)[1]) : (width ? parseInt(width) : 800); // Default to 800px
-                const parsedHeight = style && style.match(/height:\s*(\d+)px/)?.[1] ? parseInt(style.match(/height:\s*(\d+)px/)[1]) : (height ? parseInt(height) : 600); // Default to 600px
-
-                // Convert style string to object for Next.js Image component
-                const styleObject = style ? Object.fromEntries(style.split(';').filter(s => s.trim()).map(s => {
-                  const [key, value] = s.split(':').map(part => part.trim());
-                  return [key.replace(/-([a-z])/g, (g) => g[1].toUpperCase()), value];
-                })) : {};
-
-                return (
-                  <Image
-                    src={src || '/placeholder.png'} // Fallback to placeholder if src is missing
-                    alt={alt || 'Generated Image'}
-                    width={parsedWidth}
-                    height={parsedHeight}
-                    style={styleObject} // Pass original style as object
-                  />
-                );
-              }
-              return node;
-            },
-          })
-        ) : (
-          <p className="text-gray-500">AI 상세페이지 내용을 생성해주세요.</p>
+      <div className="bg-white rounded-md shadow-md">
+        {isClient && ReactQuill && (
+            <ReactQuill
+                theme="snow"
+                value={generatedDetailContent}
+                onChange={setGeneratedDetailContent}
+                className="bg-white"
+                style={{ height: '600px', marginBottom: '50px' }}
+            />
         )}
+        {!isClient && <div style={{ height: '600px', marginBottom: '50px' }} className="bg-gray-100 rounded animate-pulse"></div>}
       </div>
     </div>
   );
