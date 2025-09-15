@@ -29,6 +29,11 @@ export default function AdminLayout({
               </Link>
             </li>
             <li>
+              <Link href="/admin/manual-import" className="block py-2 px-3 rounded hover:bg-gray-700">
+                새 상품 직접 등록
+              </Link>
+            </li>
+            <li>
               <Link href="/admin/products" className="block py-2 px-3 rounded hover:bg-gray-700">
                 제품 관리
               </Link>
