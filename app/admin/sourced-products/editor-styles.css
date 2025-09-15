@@ -1,38 +1,131 @@
-          .frameless-editor .ql-toolbar.ql-snow {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            background-color: #f9fafb;
-            margin-bottom: 1.5rem;
-          }
-          .frameless-editor .ql-container.ql-snow {
-            border: none;
-          }
-          .frameless-editor .ql-editor {
-            font-size: 1.125rem !important;
-            line-height: 1.75;
-            color: #1f2937;
-            padding: 0;
-          }
-          .frameless-editor .ql-editor p {
-            font-size: 1.125rem !important;
-            margin-top: 0;
-            margin-bottom: 1.25em;
-          }
-          .frameless-editor .ql-editor h1,
-          .frameless-editor .ql-editor h2,
-          .frameless-editor .ql-editor h3 {
-            font-weight: 700;
-            margin-top: 2.5em;
-            margin-bottom: 1em;
-            padding-bottom: 0;
-            border-bottom: none;
-          }
-          .frameless-editor .ql-editor h1 {
-            font-size: 2.25rem !important;
-          }
-          .frameless-editor .ql-editor h2 {
-            font-size: 1.875rem !important;
-          }
-          .frameless-editor .ql-editor h3 {
-            font-size: 1.5rem !important;
-          }
+/* Existing Editor Styles */
+.frameless-editor .ql-toolbar.ql-snow {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background-color: #f9fafb;
+}
+.frameless-editor .ql-container.ql-snow {
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+.frameless-editor .ql-editor {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #1f2937;
+  padding: 1rem;
+  min-height: 300px;
+}
+
+/* AI Generated Content Styles */
+.ai-product-detail-container {
+    font-family: 'Pretendard', sans-serif;
+    max-width: 860px;
+    margin: 0 auto;
+}
+.ai-price-section {
+    padding: 20px;
+    text-align: right;
+}
+.ai-price-label {
+    font-size: 16px;
+    color: #888;
+}
+.ai-price-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: #d00;
+}
+.ai-headline {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 60px !important; 
+    font-weight: 700 !important; /* Bold */
+    text-align: center !important;
+    margin: 80px 20px 10px 20px;
+    word-break: keep-all;
+    line-height: 1.2;
+}
+.ai-subcopy {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    color: #666;
+    margin: 0 20px 40px 20px;
+    word-break: keep-all;
+    line-height: 1.4;
+}
+.ai-body-image {
+    width: 100%;
+    height: auto;
+    margin: 60px 0;
+    display: block;
+    border-radius: 12px;
+}
+.ai-section-title {
+    font-family: 'GmarketSansMedium', 'Pretendard', sans-serif;
+    font-size: 40px !important;
+    font-weight: 700 !important;
+    margin-top: 80px;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #000;
+    padding-bottom: 15px;
+    text-align: center;
+}
+.ai-review-card {
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f9f9f9;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 0 20px 20px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.ai-spec-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 40px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 1rem;
+}
+.ai-spec-table th, .ai-spec-table td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px;
+    text-align: left;
+}
+.ai-spec-table tr:last-child th, .ai-spec-table tr:last-child td {
+    border-bottom: none;
+}
+.ai-spec-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    width: 30%;
+}
+.ai-cta-section {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: #f9fafb;
+    margin-top: 80px;
+}
+.ai-cta-button {
+    display: inline-block;
+    background: linear-gradient(45deg, #FF5722, #FF8A65);
+    color: white;
+    padding: 20px 80px;
+    border: none;
+    border-radius: 50px;
+    font-size: 28px;
+    font-family: 'GmarketSansMedium', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(255, 87, 34, 0.4);
+    transition: all 0.3s ease;
+}
+.ai-cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 25px rgba(255, 87, 34, 0.5);
+}

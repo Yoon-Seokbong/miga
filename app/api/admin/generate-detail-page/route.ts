@@ -75,60 +75,48 @@ export async function POST(request: NextRequest) {
         const aiResponseText = response.response.text();
         const aiJson = JSON.parse(aiResponseText);
 
-        // Define styles as variables
-        const headCopyStyle = "font-family: 'GMarketSans', sans-serif; font-size: 60px; font-weight: 900; text-align: center; margin: 80px 20px 10px 20px; word-break: keep-all; line-height: 1.2;";
-        const subCopyStyle = "font-family: 'Pretendard', sans-serif; font-size: 35px; font-weight: 400; text-align: center; color: #666; margin: 0 20px 40px 20px; word-break: keep-all; line-height: 1.4;";
-        const bodyImageStyle = "width: 100%; height: auto; margin: 40px 0; display: block;";
-        const sectionTitleStyle = "font-family: 'GMarketSans', sans-serif; font-size: 36px; font-weight: 900; margin-top: 80px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; text-align: center;";
-        const reviewCardStyle = "font-family: 'Pretendard', sans-serif; background-color: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 20px; margin: 0 20px 15px 20px;";
-        const specTableStyle = "width: 100%; border-collapse: collapse; margin: 20px 0;";
-        const specThStyle = "background-color: #f2f2f2; border: 1px solid #ddd; padding: 12px; text-align: left;";
-        const specTdStyle = "border: 1px solid #ddd; padding: 12px; text-align: left;";
-        const ctaSectionStyle = "text-align: center; padding: 80px 20px; background-color: #f5f5f5;";
-        const ctaButtonStyle = "background-color: #ff5722; color: white; padding: 35px 80px; border: none; border-radius: 60px; font-size: 40px; font-weight: 900; cursor: pointer; text-decoration: none;";
-
-        // Build the HTML using the AI-generated text content and inline styles
+        // Build the HTML using the AI-generated text content and CSS classes
         let bodyContent = '';
         for (let i = 0; i < 5; i++) {
             if (aiJson.headlines[i] && aiJson.subcopies[i] && productData.images[i]) {
                 const imageUrl = typeof productData.images[i] === 'string' ? productData.images[i] : (productData.images[i] as { url: string }).url;
                 bodyContent += `
-                    <h2 style="${headCopyStyle}">${aiJson.headlines[i]}</h2>
-                    <p style="${subCopyStyle}">${aiJson.subcopies[i]}</p>
-                    <img style="${bodyImageStyle}" src="${imageUrl}" alt="${aiJson.headlines[i]}">
+                    <h2 class="ai-headline">${aiJson.headlines[i]}</h2>
+                    <p class="ai-subcopy">${aiJson.subcopies[i]}</p>
+                    <img class="ai-body-image" src="${imageUrl}" alt="${aiJson.headlines[i]}">
                 `;
             }
         }
 
         let reviewsContent = '';
         if (aiJson.reviews && aiJson.reviews.length > 0) {
-            reviewsContent += `<h2 style="${sectionTitleStyle}">먼저 경험해 본 고객들의 후기</h2>`;
+            reviewsContent += `<h2 class="ai-section-title">먼저 경험해 본 고객들의 후기</h2>`;
             aiJson.reviews.forEach((review: string) => {
-                reviewsContent += `<div style="${reviewCardStyle}">${review}</div>`;
+                reviewsContent += `<div class="ai-review-card">${review}</div>`;
             });
         }
 
         let specsContent = '';
         if (aiJson.specs) {
-            specsContent += `<h2 style="${sectionTitleStyle}">제품 제원</h2>`;
-            specsContent += `<table style="${specTableStyle}">`;
+            specsContent += `<h2 class="ai-section-title">제품 제원</h2>`;
+            specsContent += `<table class="ai-spec-table">`;
             for (const [key, value] of Object.entries(aiJson.specs)) {
-                specsContent += `<tr><th style="${specThStyle}">${key}</th><td style="${specTdStyle}">${String(value)}</td></tr>`;
+                specsContent += `<tr><th>${key}</th><td>${String(value)}</td></tr>`;
             }
             specsContent += '</table>';
         }
 
         const finalHtml = `
-            <div style="font-family: 'Pretendard', sans-serif; max-width: 860px; margin: 0 auto;">
-                <div style="padding: 20px; text-align: right;">
-                    <div style="font-size: 16px; color: #888;">구매대행</div>
-                    <div style="font-size: 28px; font-weight: 900; color: #d00;">${productData.price}원</div>
+            <div class="ai-product-detail-container">
+                <div class="ai-price-section">
+                    <div class="ai-price-label">구매대행</div>
+                    <div class="ai-price-value">${productData.price}원</div>
                 </div>
                 ${bodyContent}
                 ${reviewsContent}
                 ${specsContent}
-                <div style="${ctaSectionStyle}">
-                    <a href="#" style="${ctaButtonStyle}">지금 바로 구매하기</a>
+                <div class="ai-cta-section">
+                    <a href="#" class="ai-cta-button">지금 바로 구매하기</a>
                 </div>
             </div>
         `;
