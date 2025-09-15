@@ -4,6 +4,14 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
 
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '10mb',
+        },
+    },
+};
+
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     if (session?.user?.role !== 'ADMIN') {

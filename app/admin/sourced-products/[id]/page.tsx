@@ -172,7 +172,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
     event.target.value = '';
   };
 
-  const handleSaveChanges = async () => {
+  const handleSaveChanges = async (suppressAlert = false) => {
     if (!product) return;
     setIsSaving(true);
     try {
@@ -182,9 +182,14 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         body: JSON.stringify({ ...product, images: editableImages, detailContent }),
       });
       if (!res.ok) throw new Error((await res.json()).message || 'Failed to save changes');
-      alert('변경사항이 성공적으로 저장되었습니다!');
+      if (!suppressAlert) {
+        alert('변경사항이 성공적으로 저장되었습니다!');
+      }
     } catch (err) {
-      alert(`변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      if (!suppressAlert) {
+        alert(`변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      }
+      throw err; // Re-throw error to be caught by handleRegisterProduct
     } finally {
       setIsSaving(false);
     }
@@ -192,18 +197,36 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
   const handleRegisterProduct = async () => {
     if (!product) return;
+
+    // First, validate that required fields are filled on the frontend
+    if (!product.translatedName || !product.localPrice || !detailContent) {
+        alert('상품명, 판매가, 상세 내용은 필수 입력 항목입니다.');
+        return;
+    }
+
     setIsRegistering(true);
     try {
-      const res = await fetch('/api/products', {
+      // Step 1: Save any pending changes silently.
+      await handleSaveChanges(true);
+
+      // Step 2: Call the registration API.
+      const res = await fetch('/api/admin/register-product', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...product, images: editableImages, detailContent }),
+        body: JSON.stringify({ sourcedProductId: product.id }),
       });
-      if (!res.ok) throw new Error((await res.json()).message || 'Failed to register product');
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to register product');
+      }
+
       alert('상품이 최종 등록되었습니다!');
       router.push('/admin/products');
+
     } catch (err) {
-      alert(`상품 등록 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      console.error('상품 등록 과정 오류:', err);
+      alert(`상품 등록 과정 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
     } finally {
       setIsRegistering(false);
     }

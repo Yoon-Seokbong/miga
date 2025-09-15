@@ -25,7 +25,7 @@ interface Product {
 
   async function getProductData(productId: string) {
   try {
-    const productRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sourced-products/${productId}`, { next: { revalidate: 3600 } });
+    const productRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${productId}`, { next: { revalidate: 3600 } });
 
     if (!productRes.ok) {
       if (productRes.status === 404) notFound();
