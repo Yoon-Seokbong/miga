@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
 
         const translatedProductName = await getTranslatedText(name);
         const translatedDescription = await getTranslatedText(description);
-        
+        const imageCount = images ? images.length : 0;
+
         const productData = {
             name: translatedProductName,
             description: translatedDescription, 
@@ -51,14 +52,16 @@ export async function POST(request: NextRequest) {
 
             **Your Persona:** You are a top-tier Korean e-commerce creative director.
 
+            **Context:** There are ${imageCount} images for this product. You must generate one headline and one subcopy for each image.
+
             **Product Information (Korean):**
             *   Product Name: ${productData.name}
             *   Description & Attributes: ${productData.description} // ${JSON.stringify(productData.attributes || {})}
 
             **Task:**
             Based on the product information, generate the following content in Korean:
-            1.  **headlines**: An array of 5 short, powerful, benefit-oriented headlines.
-            2.  **subcopies**: An array of 5 sub-copies. Each subcopy should elaborate on the corresponding headline in a single, engaging sentence.
+            1.  **headlines**: An array of ${imageCount} short, powerful, benefit-oriented headlines.
+            2.  **subcopies**: An array of ${imageCount} sub-copies. Each subcopy should elaborate on the corresponding headline in a single, engaging sentence.
             3.  **reviews**: An array of 3 realistic, positive customer reviews.
             4.  **specs**: A summary of the key product specifications as a JSON object with key-value pairs.
 
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
 
         // Build the HTML using the AI-generated text content and CSS classes
         let bodyContent = '';
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < imageCount; i++) {
             if (aiJson.headlines[i] && aiJson.subcopies[i] && productData.images[i]) {
                 const imageUrl = typeof productData.images[i] === 'string' ? productData.images[i] : (productData.images[i] as { url: string }).url;
                 bodyContent += `
