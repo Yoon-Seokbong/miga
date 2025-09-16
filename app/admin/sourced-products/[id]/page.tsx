@@ -42,6 +42,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // ADDED
 
   useEffect(() => {
     if (!id) return;
@@ -83,6 +84,16 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
     fetchData();
   }, [id]);
+
+  // ADDED useEffect for success message
+  useEffect(() => {
+    if (showSuccessMessage) {
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000); // Hide after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessMessage]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -175,23 +186,32 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   const handleSaveChanges = async (suppressAlert = false) => {
     if (!product) return;
     setIsSaving(true);
+    console.log('handleSaveChanges: Starting save operation...'); // ADDED
     try {
       const res = await fetch(`/api/sourced-products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...product, images: editableImages, detailContent }),
       });
-      if (!res.ok) throw new Error((await res.json()).message || 'Failed to save changes');
+      console.log('handleSaveChanges: API response received. res.ok:', res.ok); // ADDED
+      if (!res.ok) {
+        const errorData = await res.json(); // ADDED
+        console.error('handleSaveChanges: API error response:', errorData); // ADDED
+        throw new Error(errorData.message || 'Failed to save changes');
+      }
       if (!suppressAlert) {
-        alert('변경사항이 성공적으로 저장되었습니다!');
+        setShowSuccessMessage(true); // ADDED
+        console.log('handleSaveChanges: Success message triggered.'); // ADDED
       }
     } catch (err) {
+      console.error('handleSaveChanges: Catch block error:', err); // ADDED
       if (!suppressAlert) {
         alert(`변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
       }
       throw err; // Re-throw error to be caught by handleRegisterProduct
     } finally {
       setIsSaving(false);
+      console.log('handleSaveChanges: Save operation finished. isSaving set to false.'); // ADDED
     }
   };
 
@@ -213,7 +233,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       const res = await fetch('/api/admin/register-product', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sourcedProductId: product.id }),
+        body: JSON.stringify({ sourcedProductId: product.id, categoryId: product.categoryId }),
       });
 
       if (!res.ok) {
@@ -240,7 +260,12 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       <div className="bg-gray-100 min-h-screen">
         <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm shadow-md p-2 flex justify-between items-center">
           <button onClick={() => router.back()} className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><ArrowLeft className="mr-2 h-4 w-4" />목록으로</button>
-          <h1 className="text-lg font-semibold truncate mx-4 flex-1">{product.translatedName || '상품 상세 정보'}</h1>
+          <h1 className="text-lg font-semibold truncate mx-4 flex-1">
+            {product.translatedName || '상품 상세 정보'}
+            {showSuccessMessage && (
+              <span className="ml-4 text-sm font-normal text-green-600">변경사항이 저장되었습니다!</span>
+            )}
+          </h1>
           <div className="flex items-center gap-2">
             <button onClick={handleSaveChanges} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">
               <LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isSaving && 'hidden'}`} />
@@ -298,7 +323,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
                   {editableImages.map((image) => (
                     <div key={image.url} className="w-24 h-24 relative group">
                       <div className={`w-full h-full relative cursor-pointer border-2 rounded-md overflow-hidden ${selectedImage === image.url ? 'border-indigo-500' : 'border-transparent'}`} onClick={() => setSelectedImage(image.url)}>
-                        <Image src={image.url} alt="Thumbnail" width={1000} height={1000} objectFit="cover" />
+                        <Image src={image.url} alt="Thumbnail" fill style={{ objectFit: 'cover' }} />
                       </div>
                       <div className="absolute top-0 right-0 flex flex-col gap-1 m-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleDownloadImage(image.url)} className="bg-green-500 text-white rounded-full p-1 hover:bg-green-600"><Download className="h-3 w-3" /></button>

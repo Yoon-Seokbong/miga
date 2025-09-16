@@ -43,6 +43,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
           images: { select: { id: true, url: true }, orderBy: { createdAt: 'asc' }, take: 10 },
           detailImages: { select: { id: true, url: true }, orderBy: { order: 'asc' }, take: 10 },
           videos: { select: { id: true, url: true }, orderBy: { createdAt: 'asc' }, take: 10 },
+          category: true, // Include category information
         },
       }),
       prisma.review.aggregate({

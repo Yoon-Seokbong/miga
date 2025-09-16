@@ -1,7 +1,7 @@
 'use client';
 
 import { Editor } from '@tiptap/react';
-import { Bold, Heading2, Heading3, Italic, List, ListOrdered, Pilcrow, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { Bold, Heading2, Heading3, Pilcrow, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 
 interface TiptapToolbarProps {
   editor: Editor | null;

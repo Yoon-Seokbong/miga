@@ -47,32 +47,16 @@ interface Product {
   }
 }
 
-async function getReviewsData(productId: string) {
-  try {
-    const reviewsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/reviews?productId=${productId}&limit=20&page=1`, { cache: 'no-store' });
-    if (!reviewsRes.ok) {
-      console.error('Failed to fetch reviews:', reviewsRes.statusText);
-      return []; // Return empty array on error
-    }
-    const data = await reviewsRes.json();
-    return data.reviews || [];
-  } catch (error) {
-    console.error('Error fetching reviews data:', error);
-    return []; // Return empty array on error
-  }
-}
+
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = await params; // Use productId here
 
-  const [{ product, videos }, initialReviews] = await Promise.all([
-    getProductData(productId),
-    getReviewsData(productId)
-  ]);
+  const { product } = await getProductData(productId);
 
   if (!product) {
     notFound();
   }
 
-  return <ProductDetailClient initialProduct={product} initialVideos={videos} initialReviews={initialReviews} />;
+  return <ProductDetailClient initialProduct={product} />;
 }

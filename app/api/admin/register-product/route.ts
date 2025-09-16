@@ -19,22 +19,26 @@ export async function POST(request: Request) {
     }
 
     try {
-        const { sourcedProductId } = await request.json(); // No longer expecting categoryId
+        const { sourcedProductId, categoryId: requestedCategoryId } = await request.json();
 
         if (!sourcedProductId) {
             return NextResponse.json({ error: 'Sourced Product ID is required' }, { status: 400 });
         }
 
-        // Find or create the '구매대행' category
-        const categoryName = "구매대행";
-        let category = await prisma.category.findUnique({
-            where: { name: categoryName },
-        });
+        let finalCategoryId = requestedCategoryId;
 
-        if (!category) {
-            category = await prisma.category.create({
-                data: { name: categoryName },
+        if (!finalCategoryId) {
+            const categoryName = "구매대행";
+            let category = await prisma.category.findUnique({
+                where: { name: categoryName },
             });
+
+            if (!category) {
+                category = await prisma.category.create({
+                    data: { name: categoryName },
+                });
+            }
+            finalCategoryId = category.id;
         }
 
         const sourcedProduct = await prisma.sourcedProduct.findUnique({
@@ -87,7 +91,7 @@ export async function POST(request: Request) {
                     price: sourcedProduct.localPrice || sourcedProduct.originalPrice,
                     stock: 100,
                     brand: sourcedProduct.brand || 'Unknown',
-                    categoryId: category.id,
+                    categoryId: finalCategoryId,
                     detailContent: cleanedDetailContent,
                     images: {
                         create: imagesToCreate,
@@ -107,7 +111,7 @@ export async function POST(request: Request) {
                     price: sourcedProduct.localPrice || sourcedProduct.originalPrice,
                     stock: 100,
                     brand: sourcedProduct.brand || 'Unknown',
-                    categoryId: category.id,
+                    categoryId: finalCategoryId,
                     detailContent: cleanedDetailContent,
                     images: {
                         create: imagesToCreate,
