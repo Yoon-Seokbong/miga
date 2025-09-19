@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 
 interface NativeEditorProps {
   content: string;
@@ -42,6 +43,11 @@ const NativeEditor = ({ content, onChange }: NativeEditorProps) => {
         <ToolbarButton onClick={() => execCmd('formatBlock', '<h2>')}><b>H2</b></ToolbarButton>
         <ToolbarButton onClick={() => execCmd('formatBlock', '<h3>')}><b>H3</b></ToolbarButton>
         <ToolbarButton onClick={() => execCmd('formatBlock', '<p>')}>P</ToolbarButton>
+        <div className="w-px h-6 bg-gray-300 mx-1"></div>
+
+        <ToolbarButton onClick={() => execCmd('justifyLeft' )}><AlignLeft className="h-4 w-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => execCmd('justifyCenter' )}><AlignCenter className="h-4 w-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => execCmd('justifyRight' )}><AlignRight className="h-4 w-4" /></ToolbarButton>
         <div className="w-px h-6 bg-gray-300 mx-1"></div>
         
         <select 

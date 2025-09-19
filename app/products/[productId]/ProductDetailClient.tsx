@@ -252,12 +252,28 @@ const ProductDetailClient = ({ initialProduct, initialReviews }: ProductDetailCl
       )}
 
       {/* Reviews Section */}
-      {!product.category?.name?.startsWith('구매대행') && (
-        <div className="mt-12 bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">고객 리뷰 ({initialProduct.reviewCount || 0})</h2>
-          {initialReviews.length > 0 ? (
+      {(() => {
+        const dummyReviews = [
+          { id: 'dummy1', rating: 5, comment: '배송도 빠르고 상품도 너무 마음에 듭니다! 강력 추천해요!', createdAt: new Date().toISOString(), user: { name: '김수진' } },
+          { id: 'dummy2', rating: 4, comment: '생각했던 것보다 좋네요. 잘 쓰겠습니다.', createdAt: new Date().toISOString(), user: { name: '이민준' } },
+          { id: 'dummy3', rating: 5, comment: '품질이 정말 좋습니다. 다음에도 또 구매할 의향이 있습니다.', createdAt: new Date().toISOString(), user: { name: '박서연' } },
+          { id: 'dummy4', rating: 5, comment: '디자인도 예쁘고 실용적이네요. 만족합니다.', createdAt: new Date().toISOString(), user: { name: '최지우' } },
+          { id: 'dummy5', rating: 4, comment: '가성비 최고의 상품입니다. 약간의 아쉬움은 있지만 전반적으로 만족해요.', createdAt: new Date().toISOString(), user: { name: '정현우' } },
+        ];
+
+        const reviewsToDisplay = initialReviews.length > 0 ? initialReviews : dummyReviews;
+        const reviewCount = initialReviews.length > 0 ? initialProduct.reviewCount : dummyReviews.length;
+
+        // Do not render the review section for '구매대행' products
+        if (product.category?.name === '구매대행') {
+          return null;
+        }
+
+        return (
+          <div className="mt-12 bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">고객 리뷰 ({reviewCount})</h2>
             <div className="space-y-8">
-              {initialReviews.map((review) => (
+              {reviewsToDisplay.map((review) => (
                 <div key={review.id} className="border-b pb-4 last:border-b-0 last:pb-0">
                   <div className="flex items-center mb-2">
                     <div className="flex mr-2">{getStarRating(review.rating)}</div>
@@ -270,11 +286,9 @@ const ProductDetailClient = ({ initialProduct, initialReviews }: ProductDetailCl
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-gray-600">아직 리뷰가 없습니다. 첫 리뷰를 남겨주세요!</p>
-          )}
-        </div>
-      )}
+          </div>
+        );
+      })()}
 
       {/* Conditional Additional Disclaimer Info - REMAINS HERE */}
       {product.category?.name === '구매대행' && (

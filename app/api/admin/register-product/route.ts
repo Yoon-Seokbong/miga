@@ -53,11 +53,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Product is missing required fields for registration.' }, { status: 400 });
         }
 
-        console.log('Register Product API: Sourced Product DetailContent (before cleaning):', sourcedProduct.detailContent);
-
-        const cleanedDetailContent = sourcedProduct.detailContent?.replace(/ style="[^"]*"/g, '').replace(/<!DOCTYPE html>[\s\S]*?<body[^>]*>/, '').replace(/<\/body>[\s\S]*?<\/html>/, '');
-
-        console.log('Register Product API: Cleaned DetailContent (before product creation):', cleanedDetailContent);
+        const cleanedDetailContent = sourcedProduct.detailContent;
 
         const imagesToCreate = (sourcedProduct.images as Prisma.JsonArray)?.map((img) => {
             const imgObj = img as unknown as { url: string };

@@ -62,14 +62,12 @@ export async function POST(request: NextRequest) {
             Based on the product information, generate the following content in Korean:
             1.  **headlines**: An array of ${imageCount} short, powerful, benefit-oriented headlines.
             2.  **subcopies**: An array of ${imageCount} sub-copies. Each subcopy should elaborate on the corresponding headline in a single, engaging sentence.
-            3.  **reviews**: An array of 3 realistic, positive customer reviews.
-            4.  **specs**: A summary of the key product specifications as a JSON object with key-value pairs.
+            3.  **specs**: A summary of the key product specifications as a JSON object with key-value pairs.
 
             **Output Format (MUST be a valid JSON object):**
             {
               "headlines": ["첫 번째 헤드라인", "두 번째 헤드라인", ...],
               "subcopies": ["첫 번째 서브카피", "두 번째 서브카피", ...],
-              "reviews": ["첫 번째 리뷰", "두 번째 리뷰", ...],
               "specs": { "재질": "304 스테인리스 스틸", "용량": "1.5L", ... }
             }
         `;
@@ -91,13 +89,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        let reviewsContent = '';
-        if (aiJson.reviews && aiJson.reviews.length > 0) {
-            reviewsContent += `<h2 class="ai-section-title">먼저 경험해 본 고객들의 후기</h2>`;
-            aiJson.reviews.forEach((review: string) => {
-                reviewsContent += `<div class="ai-review-card">${review}</div>`;
-            });
-        }
+
 
         let specsContent = '';
         if (aiJson.specs) {
@@ -116,7 +108,6 @@ export async function POST(request: NextRequest) {
                     <div class="ai-price-value">${productData.price}원</div>
                 </div>
                 ${bodyContent}
-                ${reviewsContent}
                 ${specsContent}
                 <div class="ai-cta-section">
                     <a href="#" class="ai-cta-button">지금 바로 구매하기</a>
