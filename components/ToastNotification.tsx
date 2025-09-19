@@ -11,18 +11,7 @@ interface ToastNotificationProps {
 }
 
 const ToastNotification: React.FC<ToastNotificationProps> = ({ message, type, onClose }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-      onClose();
-    }, 10000); // Hide after 10 seconds
-
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  if (!isVisible) return null;
+  const isVisible = true;
 
   const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
   const Icon = type === 'success' ? CheckCircle : XCircle;

@@ -183,6 +183,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   };
 
   const handleSaveChanges = async (suppressAlert = false) => {
+    console.log('handleSaveChanges called');
     if (!product) return;
     setIsSaving(true);
     console.log('handleSaveChanges: Starting save operation...'); // ADDED
