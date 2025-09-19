@@ -24,6 +24,7 @@ interface SourcedProduct {
 interface Category {
     id: string;
     name: string;
+    subcategories?: Category[];
 }
 
 const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
@@ -186,24 +187,22 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
     console.log('handleSaveChanges called');
     if (!product) return;
     setIsSaving(true);
-    console.log('handleSaveChanges: Starting save operation...'); // ADDED
+    console.log('handleSaveChanges: Starting save operation...');
     try {
       const res = await fetch(`/api/sourced-products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...product, images: editableImages, detailContent }),
       });
-      console.log('handleSaveChanges: API response received. res.ok:', res.ok); // ADDED
+      console.log('handleSaveChanges: API response received. res.ok:', res.ok);
       if (!res.ok) {
         const errorData = await res.json();
         console.error('handleSaveChanges: API error response:', errorData);
         throw new Error(errorData.message || 'Failed to save changes');
       }
       if (!suppressAlert) {
-        if (!suppressAlert) {
         setToast({ message: '변경사항이 성공적으로 저장되었습니다.', type: 'success' });
         console.log('Setting toast:', '변경사항이 성공적으로 저장되었습니다.', 'success');
-      }
       }
     } catch (err) {
       console.error('handleSaveChanges: Catch block error:', err);
@@ -211,10 +210,12 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         setToast({ message: `변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
         console.log('Setting toast:', `변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
       }
-      throw err; // Re-throw error to be caught by handleRegisterProduct
+      if (suppressAlert) {
+        throw err; // Re-throw error ONLY when called from another process like registration
+      }
     } finally {
       setIsSaving(false);
-      console.log('handleSaveChanges: Save operation finished. isSaving set to false.'); // ADDED
+      console.log('handleSaveChanges: Save operation finished. isSaving set to false.');
     }
   };
 
@@ -272,7 +273,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
             
           </h1>
           <div className="flex items-center gap-2">
-            <button onClick={handleSaveChanges} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">
+                        <button onClick={() => handleSaveChanges()} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">
               <LoaderCircle className={`animate-spin mr-2 h-5 w-5 ${!isSaving && 'hidden'}`} />
               <Save className={`mr-2 h-5 w-5 ${isSaving && 'hidden'}`} />
               변경사항 저장
@@ -307,7 +308,15 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
                     <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700">카테고리</label>
                     <select id="categoryId" name="categoryId" value={product?.categoryId || ''} onChange={handleInputChange} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                         <option value="">카테고리를 선택하세요</option>
-                        {categories.map((cat) => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}
+                        {categories.map(parentCategory => (
+                            <optgroup key={parentCategory.id} label={parentCategory.name}>
+                                {parentCategory.subcategories?.map(subCategory => (
+                                    <option key={subCategory.id} value={subCategory.id}>
+                                        {subCategory.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                        ))}
                     </select>
                 </div>
               </div>
