@@ -162,14 +162,6 @@ const EditProductPage = () => {
     return `${files.length}개 파일 선택됨`;
   };
 
-  const renderCategoryOptions = (categories: Category[], level = 0): JSX.Element[] => {
-    return categories.flatMap(category => [
-      <option key={category.id} value={category.id}>
-        {`${'—'.repeat(level)} ${category.name}`}
-      </option>,
-      ...renderCategoryOptions(category.subcategories || [], level + 1)
-    ]);
-  };
 
   const formInputStyle = "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
@@ -213,7 +205,15 @@ const EditProductPage = () => {
           <label htmlFor="category" className="block text-sm font-medium text-gray-700">카테고리</label>
           <select id="category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className={formInputStyle}>
             <option value="">카테고리 선택</option>
-            {renderCategoryOptions(categories)}
+            {categories.map(parentCategory => (
+                <optgroup key={parentCategory.id} label={parentCategory.name}>
+                    {parentCategory.subcategories?.map(subCategory => (
+                        <option key={subCategory.id} value={subCategory.id}>
+                            {subCategory.name}
+                        </option>
+                    ))}
+                </optgroup>
+            ))}
           </select>
         </div>
         <div>

@@ -40,7 +40,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ message: 'Forbidden: You do not have permission to update categories.' }, { status: 403 });
     }
 
-    const { name } = await request.json();
+    const { name, parentId } = await request.json();
 
     if (!name) {
       return NextResponse.json({ message: 'Category name is required' }, { status: 400 });
@@ -48,7 +48,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const updatedCategory = await prisma.category.update({
       where: { id: id },
-      data: { name },
+      data: { 
+        name,
+        parentId
+      },
     });
 
     return NextResponse.json({ message: 'Category updated successfully', category: updatedCategory }, { status: 200 });

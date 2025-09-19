@@ -97,20 +97,7 @@ const NewProductPage = () => {
     }
   };
 
-  const renderCategoryOptions = (categories: Category[] | undefined | null, level = 0): JSX.Element[] => {
-    if (!categories || categories.length === 0) {
-      return [];
-    }
-    return categories.flatMap(category => [
-      <option key={category.id} value={category.id}>
-        {`${'—'.repeat(level)} ${category.name}`}
-      </option>,
-      ...(category.subcategories && category.subcategories.length > 0
-        ? renderCategoryOptions(category.subcategories, level + 1)
-        : [])
-    ]);
-  };
-  
+
   const formInputStyle = "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<File[]>>) => {
@@ -165,7 +152,15 @@ const NewProductPage = () => {
           <label htmlFor="category" className="block text-sm font-medium text-gray-700">카테고리</label>
           <select id="category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className={formInputStyle}>
             <option value="">카테고리 선택</option>
-            {renderCategoryOptions(categories)}
+            {categories.map(parentCategory => (
+                <optgroup key={parentCategory.id} label={parentCategory.name}>
+                    {parentCategory.subcategories?.map(subCategory => (
+                        <option key={subCategory.id} value={subCategory.id}>
+                            {subCategory.name}
+                        </option>
+                    ))}
+                </optgroup>
+            ))}
           </select>
         </div>
         <div>

@@ -9,13 +9,34 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  parentId: string | null;
+  subcategories?: Category[];
+}
+
 export default function Layout({ children }: LayoutProps) {
   const { getTotalItems } = useCart();
   const [itemCount, setItemCount] = useState(0); // State for cart item count
+  const [categories, setCategories] = useState<Category[]>([]); // State for categories
   const { data: session } = useSession(); // Get session data
 
   useEffect(() => {
     setItemCount(getTotalItems()); // Update item count on client side
+
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        if (!res.ok) throw new Error('Failed to fetch categories');
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+
   }, [getTotalItems]); // Re-run when getTotalItems changes
 
   return (
@@ -27,7 +48,27 @@ export default function Layout({ children }: LayoutProps) {
           <nav>
             <ul className="flex space-x-4">
               <li><Link href="/" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">홈</Link></li>
-              <li><Link href="/categories" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">카테고리</Link></li>
+              
+              {/* Dynamically generated category dropdowns */}
+              {categories.map(parentCategory => (
+                <li key={parentCategory.id} className="relative group">
+                  <span className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors cursor-pointer">
+                    {parentCategory.name}
+                  </span>
+                  {parentCategory.subcategories && parentCategory.subcategories.length > 0 && (
+                    <ul className="absolute hidden group-hover:block bg-gray-800 text-white rounded-md shadow-lg mt-1 w-48 z-10">
+                      {parentCategory.subcategories.map(subCategory => (
+                        <li key={subCategory.id}>
+                          <Link href={`/categories/${subCategory.id}`} className="block px-4 py-2 hover:bg-gray-700">
+                            {subCategory.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+
               <li><Link href="/my-orders" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">나의 주문</Link></li>
               <li><Link href="/my-reviews" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">내 활동 내역</Link></li>
               <li>

@@ -64,18 +64,12 @@ async function getReviewsData(productId: string) {
 
 
 
-interface Review {
-  id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-  user: { name: string };
-}
+
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = await params; // Use productId here
 
-  const [{ product, videos }, initialReviews] = await Promise.all([
+  const [{ product }, initialReviews] = await Promise.all([
     getProductData(productId),
     getReviewsData(productId)
   ]);

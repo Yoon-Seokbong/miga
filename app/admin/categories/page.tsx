@@ -1,157 +1,254 @@
 'use client';
 
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
+import ToastNotification from '@/components/ToastNotification';
+import { LoaderCircle, PlusCircle, Edit, Trash2 } from 'lucide-react';
 
+// Updated Category interface
 interface Category {
   id: string;
   name: string;
   parentId: string | null;
-  subcategories: Category[];
+  subcategories?: Category[];
 }
 
-const AdminCategoriesPage = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // For creating/editing
+const CategoryManagementPage = () => {
+  const [categories, setCategories] = useState<Category[]>([]); // Will hold parent categories
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryParentId, setNewCategoryParentId] = useState(''); // For the 'Add' form dropdown
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [categoryName, setCategoryName] = useState('');
-  const [parentCategoryId, setParentCategoryId] = useState<string | null>(null);
-
-  const fetchCategories = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/categories');
-      if (!res.ok) throw new Error('Failed to fetch categories');
-      const data: Category[] = await res.json();
-      setCategories(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  const handleFormSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!categoryName) return;
+  // Set default parent category for the 'Add' form when categories are loaded
+  useEffect(() => {
+    if (categories.length > 0 && !newCategoryParentId) {
+      setNewCategoryParentId(categories[0].id);
+    }
+  }, [categories, newCategoryParentId]);
 
-    const apiEndpoint = editingCategory ? `/api/categories/${editingCategory.id}` : '/api/categories';
-    const method = editingCategory ? 'PUT' : 'POST';
-
+  const fetchCategories = async () => {
+    setLoading(true);
     try {
-      const res = await fetch(apiEndpoint, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: categoryName, parentId: parentCategoryId }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        if (res.status === 409 && errorData.message) {
-          throw new Error(errorData.message);
-        } else {
-          throw new Error(errorData.message || `Failed to ${method === 'POST' ? 'create' : 'update'} category`);
-        }
-      }
-
-      // Reset form and refetch categories
-      setEditingCategory(null);
-      setCategoryName('');
-      setParentCategoryId(null);
-      await fetchCategories();
-
+      const res = await fetch('/api/categories');
+      if (!res.ok) throw new Error('Failed to fetch categories');
+      const data = await res.json();
+      setCategories(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setToast({ message: `카테고리 불러오기 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEdit = (category: Category) => {
-    setEditingCategory(category);
-    setCategoryName(category.name);
-    setParentCategoryId(category.parentId);
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim() || !newCategoryParentId) {
+      setToast({ message: '카테고리 이름과 상위 카테고리를 모두 입력/선택해주세요.', type: 'error' });
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newCategoryName, parentId: newCategoryParentId }),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to add category');
+      }
+      setToast({ message: '카테고리가 성공적으로 추가되었습니다.', type: 'success' });
+      setNewCategoryName('');
+      fetchCategories(); // Refresh list
+    } catch (err) {
+      setToast({ message: `카테고리 추가 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = async (categoryId: string) => {
-    if (!confirm('정말로 이 카테고리를 삭제하시겠습니까? 하위 카테고리와 연관된 상품들도 영향을 받을 수 있습니다.')) return;
-
+  const handleEditCategory = async () => {
+    if (!editingCategory || !editingCategory.name.trim()) {
+      setToast({ message: '카테고리 이름을 입력해주세요.', type: 'error' });
+      return;
+    }
+    setLoading(true);
     try {
-      const res = await fetch(`/api/categories/${categoryId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/categories/${editingCategory.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            name: editingCategory.name,
+            parentId: editingCategory.parentId // Also send parentId
+        }),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to update category');
+      }
+      setToast({ message: '카테고리가 성공적으로 업데이트되었습니다.', type: 'success' });
+      setEditingCategory(null);
+      fetchCategories(); // Refresh list
+    } catch (err) {
+      setToast({ message: `카테고리 업데이트 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm('정말로 이 카테고리를 삭제하시겠습니까? 이 카테고리에 속한 상품들은 카테고리 연결이 해제됩니다.')) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/categories/${id}`, {
+        method: 'DELETE',
+      });
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.message || 'Failed to delete category');
       }
-      await fetchCategories(); // Refresh list
+      setToast({ message: '카테고리가 성공적으로 삭제되었습니다.', type: 'success' });
+      fetchCategories(); // Refresh list
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setToast({ message: `카테고리 삭제 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const renderCategory = (category: Category, level = 0) => (
-    <div key={category.id} style={{ marginLeft: `${level * 20}px` }} className="p-2 border-b border-gray-200 flex justify-between items-center">
-      <span>{category.name}</span>
-      <div className="space-x-2">
-        <button onClick={() => handleEdit(category)} className="text-sm text-blue-600 hover:underline">수정</button>
-        <button onClick={() => handleDelete(category.id)} className="text-sm text-red-600 hover:underline">삭제</button>
-      </div>
-    </div>
-  );
-
-  const renderCategories = (categories: Category[], level = 0) => {
-    return categories.map(category => (
-      <React.Fragment key={category.id}>
-        {renderCategory(category, level)}
-        {category.subcategories && category.subcategories.length > 0 && renderCategories(category.subcategories, level + 1)}
-      </React.Fragment>
-    ));
-  };
-
-  if (isLoading) return <p>Loading categories...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
-
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-6">
+      {toast && <ToastNotification message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <h1 className="text-2xl font-bold mb-6">카테고리 관리</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">카테고리 목록</h2>
-          <div className="border rounded-md">
-            {categories.length > 0 ? renderCategories(categories) : <p className="p-4 text-gray-500">카테고리가 없습니다.</p>}
-          </div>
+
+      {/* Add New Category Form */}
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold mb-4">새 하위 카테고리 추가</h2>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+          <select
+            value={newCategoryParentId}
+            onChange={(e) => setNewCategoryParentId(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            disabled={loading}
+          >
+            <option value="" disabled>상위 카테고리 선택</option>
+            {categories.map(parent => (
+                <option key={parent.id} value={parent.id}>{parent.name}</option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="새 하위 카테고리 이름"
+            value={newCategoryName}
+            onChange={(e) => setNewCategoryName(e.target.value)}
+            className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          <button
+            onClick={handleAddCategory}
+            disabled={loading}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 flex items-center justify-center"
+          >
+            {loading ? <LoaderCircle className="animate-spin mr-2" size={20} /> : <PlusCircle className="mr-2" size={20} />}
+            추가
+          </button>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md h-fit">
-          <h2 className="text-xl font-semibold mb-4">{editingCategory ? '카테고리 수정' : '새 카테고리 추가'}</h2>
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">카테고리 이름</label>
-              <input 
-                type="text" 
-                id="categoryName" 
-                value={categoryName} 
-                onChange={(e) => setCategoryName(e.target.value)} 
-                required 
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+      </div>
+
+      {/* Category Lists by Parent */}
+      {loading ? (
+        <div className="flex justify-center items-center h-32"><LoaderCircle className="animate-spin h-8 w-8 text-indigo-600" /></div>
+      ) : (
+        categories.map(parentCategory => (
+          <div key={parentCategory.id} className="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 className="text-xl font-semibold mb-4">{parentCategory.name}</h2>
+            {parentCategory.subcategories && parentCategory.subcategories.length > 0 ? (
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">이름</th>
+                    <th scope="col" className="relative px-6 py-3"><span className="sr-only">Edit</span></th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {parentCategory.subcategories.map((category) => (
+                    <tr key={category.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {category.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => setEditingCategory(category)}
+                          className="text-indigo-600 hover:text-indigo-900 mr-4"
+                        >
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCategory(category.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-600">등록된 하위 카테고리가 없습니다.</p>
+            )}
+          </div>
+        ))
+      )}
+
+      {/* Edit Category Modal/Form */}
+      {editingCategory && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-96">
+            <h2 className="text-xl font-bold mb-4">카테고리 편집</h2>
+            <div className="space-y-4">
+                <input
+                  type="text"
+                  value={editingCategory.name}
+                  onChange={(e) => setEditingCategory({ ...editingCategory, name: e.target.value })}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <select
+                    value={editingCategory.parentId || ''}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, parentId: e.target.value })}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                    <option value="" disabled>상위 카테고리 선택</option>
+                    {categories.map(parent => (
+                        <option key={parent.id} value={parent.id}>{parent.name}</option>
+                    ))}
+                </select>
             </div>
-            {/* Optional: Parent Category Selection - can be added later */}
-            <button type="submit" className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-              {editingCategory ? '업데이트' : '추가'}
-            </button>
-            {editingCategory && (
-              <button type="button" onClick={() => { setEditingCategory(null); setCategoryName(''); setParentCategoryId(null); }} className="w-full mt-2 px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400">
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => setEditingCategory(null)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+              >
                 취소
               </button>
-            )}
-          </form>
+              <button
+                onClick={handleEditCategory}
+                disabled={loading}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {loading ? <LoaderCircle className="animate-spin" size={20} /> : '저장'}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default AdminCategoriesPage;
+export default CategoryManagementPage;
