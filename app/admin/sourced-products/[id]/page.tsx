@@ -200,8 +200,10 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         throw new Error(errorData.message || 'Failed to save changes');
       }
       if (!suppressAlert) {
+        if (!suppressAlert) {
         setToast({ message: '변경사항이 성공적으로 저장되었습니다.', type: 'success' });
         console.log('Setting toast:', '변경사항이 성공적으로 저장되었습니다.', 'success');
+      }
       }
     } catch (err) {
       console.error('handleSaveChanges: Catch block error:', err);
