@@ -17,7 +17,7 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({ message, type, on
     const timer = setTimeout(() => {
       setIsVisible(false);
       onClose();
-    }, 3000); // Hide after 3 seconds
+    }, 10000); // Hide after 10 seconds
 
     return () => clearTimeout(timer);
   }, [onClose]);

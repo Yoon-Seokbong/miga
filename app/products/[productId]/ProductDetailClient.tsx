@@ -6,6 +6,7 @@ import { useCart } from '@/context/CartContext';
 import { Star, StarHalf, StarOff } from 'lucide-react';
 import Button from '@/components/Button';
 import WishlistButton from '@/components/WishlistButton';
+import { useRouter } from 'next/navigation'; // ADDED
 
 import ProductDetailContent from '@/components/ProductDetailContent'; // ADDED
 
@@ -28,12 +29,17 @@ interface Product {
   detailContent?: string; // ADDED
 }
 
-
+interface Review {
+  id: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: { name: string };
+}
 
 interface ProductDetailClientProps {
   initialProduct: Product;
-  
-  
+  initialReviews: Review[];
 }
 
 const MandatoryNoticeSection = () => {
@@ -128,12 +134,13 @@ const AdditionalDisclaimerInfo = () => (
   </div>
 );
 
-const ProductDetailClient = ({ initialProduct }: ProductDetailClientProps) => {
+const ProductDetailClient = ({ initialProduct, initialReviews }: ProductDetailClientProps) => {
   const product = initialProduct;
   console.log('Product category:', product.category);
   const [selectedMedia, setSelectedMedia] = useState<{ type: 'image' | 'video'; url: string; id: string } | null>(null);
   
   const { addToCart } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     if (product.images && product.images.length > 0) {
@@ -209,7 +216,7 @@ const ProductDetailClient = ({ initialProduct }: ProductDetailClientProps) => {
         {/* Product Details */}
         <div className="lg:col-span-1 space-y-6">
           <h1 className="text-4xl font-bold text-gray-900">{product.name}</h1>
-          {product.averageRating !== undefined && product.reviewCount !== undefined && (
+          {product.reviewCount > 0 && (
             <div className="flex items-center space-x-2">
               <div className="flex">{getStarRating(product.averageRating)}</div>
               <span className="text-gray-600 text-sm">({product.reviewCount} 리뷰)</span>
@@ -224,7 +231,7 @@ const ProductDetailClient = ({ initialProduct }: ProductDetailClientProps) => {
 
           <div className="flex space-x-4">
             <Button onClick={() => addToCart({ id: product.id, name: product.name, price: product.price, imageUrl: product.images[0]?.url || '' })} className="flex-1 py-3 text-lg">장바구니에 추가</Button>
-            <Button className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white">바로 구매</Button> {/* ADDED */}
+            <Button onClick={() => { addToCart({ id: product.id, name: product.name, price: product.price, imageUrl: product.images[0]?.url || '' }); router.push('/cart'); }} className="flex-1 py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white">바로 구매</Button> {/* ADDED */}
             <WishlistButton productId={product.id} className="flex-1 py-3 text-lg" />
           </div>
         </div>
@@ -241,6 +248,31 @@ const ProductDetailClient = ({ initialProduct }: ProductDetailClientProps) => {
       {product.detailContent && (
         <div className="mt-12">
           <ProductDetailContent content={product.detailContent} />
+        </div>
+      )}
+
+      {/* Reviews Section */}
+      {!product.category?.name?.startsWith('구매대행') && (
+        <div className="mt-12 bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">고객 리뷰 ({initialProduct.reviewCount || 0})</h2>
+          {initialReviews.length > 0 ? (
+            <div className="space-y-8">
+              {initialReviews.map((review) => (
+                <div key={review.id} className="border-b pb-4 last:border-b-0 last:pb-0">
+                  <div className="flex items-center mb-2">
+                    <div className="flex mr-2">{getStarRating(review.rating)}</div>
+                    <span className="text-gray-600 text-sm">
+                      {review.user.name ? `${review.user.name.charAt(0)}***님` : '익명'}
+                    </span>
+                  </div>
+                  <p className="text-gray-800 leading-relaxed">{review.comment}</p>
+                  <p className="text-gray-500 text-sm mt-2">{new Date(review.createdAt).toLocaleDateString()}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">아직 리뷰가 없습니다. 첫 리뷰를 남겨주세요!</p>
+          )}
         </div>
       )}
 

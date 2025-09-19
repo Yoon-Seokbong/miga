@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowLeft, LoaderCircle, Save, Trash2, UploadCloud, PlusSquare, Replace, Download } from 'lucide-react';
 import NativeEditor from '@/components/NativeEditor'; // Import our new custom editor
+import ToastNotification from '@/components/ToastNotification'; // ADDED
 
 // Simplified interfaces for clarity
 interface SourcedProduct {
@@ -42,7 +43,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // ADDED
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -76,7 +77,8 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
       } catch (err) {
         console.error(err);
-        alert(`데이터 불러오기 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+        setToast({ message: `데이터 불러오기 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+        console.log('Setting toast:', `데이터 불러오기 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
       } finally {
         setIsLoading(false);
       }
@@ -85,15 +87,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
     fetchData();
   }, [id]);
 
-  // ADDED useEffect for success message
-  useEffect(() => {
-    if (showSuccessMessage) {
-      const timer = setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 3000); // Hide after 3 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [showSuccessMessage]);
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -118,7 +112,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         window.URL.revokeObjectURL(blobUrl);
         document.body.removeChild(a);
       })
-      .catch(() => alert('이미지를 다운로드하는 데 실패했습니다.'));
+      .catch(() => setToast({ message: '이미지를 다운로드하는 데 실패했습니다.', type: 'error' }));
   };
 
   const uploadFile = async (file: File): Promise<string> => {
@@ -136,7 +130,8 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       const remainingImages = editableImages.filter(img => img.url !== urlToDelete);
       setSelectedImage(remainingImages.length > 0 ? remainingImages[0].url : null);
     }
-    alert('갤러리에서 이미지가 삭제되었습니다. 에디터 내의 이미지는 수동으로 삭제해주세요.');
+    setToast({ message: '갤러리에서 이미지가 삭제되었습니다. 에디터 내의 이미지는 수동으로 삭제해주세요.', type: 'success' });
+    console.log('Setting toast:', '갤러리에서 이미지가 삭제되었습니다. 에디터 내의 이미지는 수동으로 삭제해주세요.', 'success');
   };
 
   const handleAddImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,9 +143,11 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         const newUrl = await uploadFile(file);
         setEditableImages(prev => [...prev, { url: newUrl }]);
       }
-      alert('갤러리에 이미지가 추가되었습니다. 에디터에 직접 이미지를 추가할 수 있습니다.');
+      setToast({ message: '갤러리에 이미지가 추가되었습니다. 에디터에 직접 이미지를 추가할 수 있습니다.', type: 'success' });
+      console.log('Setting toast:', '갤러리에 이미지가 추가되었습니다. 에디터에 직접 이미지를 추가할 수 있습니다.', 'success');
     } catch (err) {
-      alert(`업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setToast({ message: `업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`, type: 'error' });
+      console.log('Setting toast:', `업로드 실패: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
     } finally {
       setIsUploading(false);
     }
@@ -173,9 +170,11 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       if (selectedImage === oldUrl) {
         setSelectedImage(newUrl);
       }
-      alert('갤러리 이미지가 교체되었습니다. 에디터의 이미지는 수동으로 교체해주세요.');
+      setToast({ message: '갤러리 이미지가 교체되었습니다. 에디터의 이미지는 수동으로 교체해주세요.', type: 'success' });
+      console.log('Setting toast:', '갤러리 이미지가 교체되었습니다. 에디터의 이미지는 수동으로 교체해주세요.', 'success');
     } catch (err) {
-      alert(`이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setToast({ message: `이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`, type: 'error' });
+      console.log('Setting toast:', `이미지 교체 실패: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
     } finally {
       setIsUploading(false);
       setImageToReplace(null);
@@ -195,18 +194,19 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
       });
       console.log('handleSaveChanges: API response received. res.ok:', res.ok); // ADDED
       if (!res.ok) {
-        const errorData = await res.json(); // ADDED
-        console.error('handleSaveChanges: API error response:', errorData); // ADDED
+        const errorData = await res.json();
+        console.error('handleSaveChanges: API error response:', errorData);
         throw new Error(errorData.message || 'Failed to save changes');
       }
       if (!suppressAlert) {
-        setShowSuccessMessage(true); // ADDED
-        console.log('handleSaveChanges: Success message triggered.'); // ADDED
+        setToast({ message: '변경사항이 성공적으로 저장되었습니다.', type: 'success' });
+        console.log('Setting toast:', '변경사항이 성공적으로 저장되었습니다.', 'success');
       }
     } catch (err) {
-      console.error('handleSaveChanges: Catch block error:', err); // ADDED
+      console.error('handleSaveChanges: Catch block error:', err);
       if (!suppressAlert) {
-        alert(`변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+        setToast({ message: `변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+        console.log('Setting toast:', `변경사항 저장 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
       }
       throw err; // Re-throw error to be caught by handleRegisterProduct
     } finally {
@@ -220,7 +220,8 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
     // First, validate that required fields are filled on the frontend
     if (!product.translatedName || !product.localPrice || !detailContent) {
-        alert('상품명, 판매가, 상세 내용은 필수 입력 항목입니다.');
+        setToast({ message: '상품명, 판매가, 상세 내용은 필수 입력 항목입니다.', type: 'error' });
+        console.log('Setting toast:', '상품명, 판매가, 상세 내용은 필수 입력 항목입니다.', 'error');
         return;
     }
 
@@ -241,12 +242,14 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
         throw new Error(errorData.error || 'Failed to register product');
       }
 
-      alert('상품이 최종 등록되었습니다!');
+      setToast({ message: '상품이 최종 등록되었습니다!', type: 'success' });
+      console.log('Setting toast:', '상품이 최종 등록되었습니다!', 'success');
       router.push('/admin/products');
 
     } catch (err) {
       console.error('상품 등록 과정 오류:', err);
-      alert(`상품 등록 과정 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+      setToast({ message: `상품 등록 과정 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, type: 'error' });
+      console.log('Setting toast:', `상품 등록 과정 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`, 'error');
     } finally {
       setIsRegistering(false);
     }
@@ -257,14 +260,13 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
+      {toast && <ToastNotification message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="bg-gray-100 min-h-screen">
         <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm shadow-md p-2 flex justify-between items-center">
           <button onClick={() => router.back()} className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"><ArrowLeft className="mr-2 h-4 w-4" />목록으로</button>
           <h1 className="text-lg font-semibold truncate mx-4 flex-1">
             {product.translatedName || '상품 상세 정보'}
-            {showSuccessMessage && (
-              <span className="ml-4 text-sm font-normal text-green-600">변경사항이 저장되었습니다!</span>
-            )}
+            
           </h1>
           <div className="flex items-center gap-2">
             <button onClick={handleSaveChanges} disabled={isSaving || isRegistering || isUploading} className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 disabled:opacity-50">
@@ -323,7 +325,7 @@ const SourcedProductEditPage = ({ params }: { params: { id: string } }) => {
                   {editableImages.map((image) => (
                     <div key={image.url} className="w-24 h-24 relative group">
                       <div className={`w-full h-full relative cursor-pointer border-2 rounded-md overflow-hidden ${selectedImage === image.url ? 'border-indigo-500' : 'border-transparent'}`} onClick={() => setSelectedImage(image.url)}>
-                        <Image src={image.url} alt="Thumbnail" fill style={{ objectFit: 'cover' }} />
+                        <Image src={image.url} alt="Thumbnail" fill sizes="96px" style={{ objectFit: 'cover' }} />
                       </div>
                       <div className="absolute top-0 right-0 flex flex-col gap-1 m-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleDownloadImage(image.url)} className="bg-green-500 text-white rounded-full p-1 hover:bg-green-600"><Download className="h-3 w-3" /></button>

@@ -139,7 +139,7 @@ export async function POST(request: Request) {
         userId: userId,
         rating,
         comment,
-        status: 'PENDING',
+        status: 'APPROVED',
         images: {
           create: uploadedImageUrls,
         },
