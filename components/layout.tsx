@@ -43,70 +43,71 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-primary text-white p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container mx-auto flex items-center gap-x-8">
           <h1 className="text-2xl font-bold"><Link href="/">MIGA 쇼핑몰</Link></h1>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><Link href="/" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">홈</Link></li>
-              
-              {/* Dynamically generated category dropdowns */}
-              {categories.map(parentCategory => (
-                <li key={parentCategory.id} className="relative group">
-                  <span className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors cursor-pointer">
-                    {parentCategory.name}
-                  </span>
-                  {parentCategory.subcategories && parentCategory.subcategories.length > 0 && (
-                    <ul className="absolute hidden group-hover:block bg-gray-800 text-white rounded-md shadow-lg mt-1 w-48 z-10">
-                      {parentCategory.subcategories.map(subCategory => (
-                        <li key={subCategory.id}>
-                          <Link href={`/categories/${subCategory.id}`} className="block px-4 py-2 hover:bg-gray-700">
-                            {subCategory.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
+          <nav className="flex-grow">
+            <div className="flex justify-between items-center">
+              {/* Left-aligned main menu */}
+              <ul className="flex items-center space-x-4">
+                <li><Link href="/" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">홈</Link></li>
+                {categories.map(parentCategory => (
+                  <li key={parentCategory.id} className="relative group">
+                    <span className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors cursor-pointer">
+                      {parentCategory.name}
+                    </span>
+                    {parentCategory.subcategories && parentCategory.subcategories.length > 0 && (
+                      <ul className="absolute hidden group-hover:block bg-gray-800 text-white rounded-md shadow-lg mt-1 w-48 z-10">
+                        {parentCategory.subcategories.map(subCategory => (
+                          <li key={subCategory.id}>
+                            <Link href={`/categories/${subCategory.id}`} className="block px-4 py-2 hover:bg-gray-700">
+                              {subCategory.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
 
-              <li><Link href="/my-orders" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">나의 주문</Link></li>
-              <li><Link href="/my-reviews" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">내 활동 내역</Link></li>
-              <li>
-                <Link
-                  href="/cart"
-                  className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">
-                  장바구니 ({itemCount}) {/* Display item count */}
-                </Link>
-              </li>
-              <li><Link href="/request-product" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">상품 요청</Link></li>
-              <li><Link href="/admin" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">관리자</Link></li> {/* New Admin link */}
-              {session?.user ? ( // If session exists (user is logged in)
-                <>
-                  <li><Link href="/my-account/wishlist" className="px-3 py-1 rounded-md bg-gray-700 text-white hover:bg-gray-600 transition-colors">위시리스트</Link></li>
-                  <li>
-                    <button
-                      onClick={() => signOut()}
-                      className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors"
-                    >
-                      로그아웃
-                    </button>
-                  </li>
-                </>
-              ) : ( // If no session (user is logged out or loading)
-                <>
-                  <li>
-                    <Link href="/auth/login" className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
-                      로그인
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/auth/register" className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
-                      회원가입
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
+              {/* Right-aligned utility menu */}
+              <ul className="flex items-center space-x-4">
+                <li><Link href="/my-orders" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">나의 주문</Link></li>
+                <li><Link href="/my-reviews" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">내 활동 내역</Link></li>
+                <li>
+                  <Link href="/cart" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
+                    장바구니 ({itemCount})
+                  </Link>
+                </li>
+                <li><Link href="/request-product" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">상품 요청</Link></li>
+                {session?.user?.role === 'ADMIN' && (
+                  <li><Link href="/admin" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">관리자</Link></li>
+                )}
+                {session?.user ? (
+                  <>
+                    <li><Link href="/my-account/wishlist" className="px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">위시리스트</Link></li>
+                    <li>
+                      <button onClick={() => signOut()} className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                        로그아웃
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link href="/auth/login" className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                        로그인
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/auth/register" className="px-3 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                        회원가입
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
           </nav>
         </div>
       </header>
