@@ -80,11 +80,9 @@ export async function POST(request: NextRequest) {
         let bodyContent = '';
         for (let i = 0; i < imageCount; i++) {
             if (aiJson.headlines[i] && aiJson.subcopies[i] && productData.images[i]) {
-                const imageUrl = typeof productData.images[i] === 'string' ? productData.images[i] : (productData.images[i] as { url: string }).url;
                 bodyContent += `
                     <h2 class="ai-headline">${aiJson.headlines[i]}</h2>
                     <p class="ai-subcopy">${aiJson.subcopies[i]}</p>
-                    <img class="ai-body-image" src="${imageUrl}" alt="${aiJson.headlines[i]}">
                 `;
             }
         }
@@ -103,15 +101,8 @@ export async function POST(request: NextRequest) {
 
         const finalHtml = `
             <div class="ai-product-detail-container">
-                <div class="ai-price-section">
-                    <div class="ai-price-label">구매대행</div>
-                    <div class="ai-price-value">${productData.price}원</div>
-                </div>
                 ${bodyContent}
                 ${specsContent}
-                <div class="ai-cta-section">
-                    <a href="#" class="ai-cta-button">지금 바로 구매하기</a>
-                </div>
             </div>
         `;
 

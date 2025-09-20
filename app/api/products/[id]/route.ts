@@ -130,7 +130,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     if (categoryId) {
       updateData.category = { connect: { id: categoryId } };
     }
-    if (detailContent) updateData.detailContent = detailContent; // Add detailContent to updateData
+    if (detailContent !== undefined) updateData.detailContent = detailContent; // Add detailContent to updateData
 
     // --- Handle New Image Uploads ---
     const newImageRecords = [];

@@ -33,6 +33,7 @@ model Product {
   wishlistedBy  Wishlist[]
 
   detailContent String? // NEW FIELD: To store AI-generated or manually edited HTML content
+  coupangSellerProductId String? @unique // NEW FIELD: To store Coupang's seller product ID
 
   @@index([categoryId])
   @@index([createdAt])
