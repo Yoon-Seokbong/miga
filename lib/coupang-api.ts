@@ -122,7 +122,7 @@ export async function createCoupangProduct(product: MigaProduct, categoryCode: n
         contentsType: 'HTML',
         contentDetails: [
           {
-            content: product.detailContent || '<p>상세 정보가 없습니다.</p>',
+            content: (product.detailContent || '<p>상세 정보가 없습니다.</p>').replace(/<img[^>]*>/g, ''), // Filter out <img> tags for Coupang
             detailType: 'TEXT'
           }
         ]

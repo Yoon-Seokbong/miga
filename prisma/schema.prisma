@@ -34,6 +34,7 @@ model Product {
 
   detailContent String? // NEW FIELD: To store AI-generated or manually edited HTML content
   coupangSellerProductId String? @unique // NEW FIELD: To store Coupang's seller product ID
+  naverOriginProductNo String? @unique // NEW FIELD: To store Naver's origin product ID
 
   @@index([categoryId])
   @@index([createdAt])
