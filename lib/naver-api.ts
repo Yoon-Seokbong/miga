@@ -20,15 +20,20 @@ export async function getNaverAccessToken(): Promise<string> {
   params.append('client_secret', NAVER_CLIENT_SECRET);
 
   try {
-    const response = await fetch(`${NAVER_AUTH_BASE_URL}/oauth2.0/token`, {
+    const tokenUrl = `${NAVER_AUTH_BASE_URL}/oauth2.0/token?grant_type=client_credentials&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}`;
+
+    const response = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
-      body: params.toString(),
     });
 
     const data = await response.json();
+
+    console.log('--- [DEBUG] Full Response from Naver Token API ---');
+    console.log(JSON.stringify(data, null, 2));
+    console.log('-------------------------------------------------');
 
     if (!response.ok) {
       console.error('Naver API Token Error:', data);
@@ -63,13 +68,19 @@ export async function getNaverCategories(): Promise<NaverCategory[]> { // Change
   const path = '/external/v1/categories';
 
   try {
+    const requestHeaders = {
+      'Authorization': `Bearer ${accessToken}`,
+    };
+
+    console.log('\n--- [DEBUG] Naver API Request --- ');
+    console.log('URL:', NAVER_COMMERCE_API_BASE_URL + path);
+    console.log('Method:', method);
+    console.log('Headers:', JSON.stringify(requestHeaders, null, 2));
+    console.log('-----------------------------------\n');
+
     const response = await fetch(NAVER_COMMERCE_API_BASE_URL + path, {
       method,
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'X-Naver-Client-Id': NAVER_CLIENT_ID, // ADDED
-        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET, // ADDED
-      },
+      headers: requestHeaders,
     });
 
     const data = await response.json();

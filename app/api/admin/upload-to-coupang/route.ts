@@ -2,7 +2,26 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { predictCategory, createCoupangProduct } from '@/lib/coupang-api';
+import { getAllCategories, createCoupangProduct } from '@/lib/coupang-api';
+
+// Recursive helper to find ALL categories containing a substring and return their full path
+const findAllCategoriesWithSubstring = (categories, substring, currentPath = []) => {
+  let results = [];
+  for (const category of categories) {
+    const newPath = [...currentPath, category.name];
+    if (category.name && category.name.includes(substring)) {
+      results.push({
+        name: category.name,
+        code: category.displayCategoryCode,
+        fullPath: newPath.join(' > ') // Add full path
+      });
+    }
+    if (category.child && category.child.length > 0) {
+      results = results.concat(findAllCategoriesWithSubstring(category.child, substring, newPath));
+    }
+  }
+  return results;
+};
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -16,40 +35,39 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    // 1. Fetch product data from our database
+    // 1. Fetch our product from the database
     const product = await prisma.product.findUnique({
       where: { id: productId },
       include: { images: true },
     });
-
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // 2. Predict Coupang category
-    console.log(`Predicting Coupang category for: ${product.name}`);
-    const predictedCategory = await predictCategory(product.name);
-    if (!predictedCategory || !predictedCategory.categoryId) {
-        throw new Error('Could not predict Coupang category.');
-    }
-    console.log(`Predicted Category ID: ${predictedCategory.categoryId}`);
+    // 2. Get all categories and find broader categories containing "자전거"
+    console.log('--- [DEBUG] Fetching all Coupang categories and searching for \'자전거\'... ---');
+    const categoryData = await getAllCategories();
 
-    // 3. Register the product on Coupang
-    console.log(`Registering product to Coupang...`);
-    const coupangResponse = await createCoupangProduct(product, predictedCategory.categoryId);
-
-    // After successful registration, save the returned Coupang ID to our database
-    if (coupangResponse && coupangResponse.sellerProductId) {
-      await prisma.product.update({
-        where: { id: productId },
-        data: { coupangSellerProductId: String(coupangResponse.sellerProductId) },
-      });
-      console.log(`Associated Coupang Seller Product ID ${coupangResponse.sellerProductId} with our product ${productId}`);
+    if (!categoryData || !Array.isArray(categoryData.child)) {
+        console.error("Coupang category data format is unexpected:", categoryData);
+        throw new Error("Coupang category data format is unexpected. Expected an object with a 'child' array.");
     }
 
-    return NextResponse.json({ 
-        message: 'Successfully registered product to Coupang!', 
-        coupangResponse 
+    const topLevelCategories = categoryData.child;
+    const searchResults = findAllCategoriesWithSubstring(topLevelCategories, "자전거");
+
+    if (searchResults.length === 0) {
+      throw new Error('Could not find any category containing "자전거". Please check Coupang category structure.');
+    }
+
+    console.log('--- [DEBUG] Found categories containing "자전거" ---');
+    console.log(JSON.stringify(searchResults, null, 2));
+    console.log('--- [DEBUG] End of Search ---');
+
+    // For now, we will just return the search results. User will pick the best one.
+    return NextResponse.json({
+        message: 'Found potential categories. Please check the server console log and provide the correct full path (e.g., "가전/디지털 > 자전거/킥보드 > 전기자전거") and its code.',
+        results: searchResults
     });
 
   } catch (error) {
