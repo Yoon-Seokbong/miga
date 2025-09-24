@@ -54,6 +54,23 @@ const AdminProductRequestsPage = () => {
     console.log('Selected Request Image URL:', request.imageUrl);
   };
 
+  const handleDelete = async (requestId: string) => {
+    if (!window.confirm('정말로 이 상품 요청을 삭제하시겠습니까?')) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/product-requests/${requestId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || '요청 삭제에 실패했습니다.');
+      }
+      setRequests(prev => prev.filter(req => req.id !== requestId));
+      alert('상품 요청이 성공적으로 삭제되었습니다.');
+    } catch (err) {
+      alert(`삭제 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+    }
+  };
+
   const totalPages = Math.ceil(totalCount / limit);
 
   if (isLoading) return <p>상품 요청 목록을 불러오는 중...</p>;
@@ -120,9 +137,8 @@ const AdminProductRequestsPage = () => {
                     {new Date(request.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {/* Action buttons like Approve/Reject/Delete would go here */}
-                    <button onClick={() => { console.log('상세 button clicked!'); handleViewDetails(request); }} className="text-indigo-600 hover:text-indigo-900 mr-2">상세</button>
-                    {/* Add more actions as needed */}
+                    <button onClick={() => handleViewDetails(request)} className="text-indigo-600 hover:text-indigo-900 mr-4">상세</button>
+                    <button onClick={() => handleDelete(request.id)} className="text-red-600 hover:text-red-900">삭제</button>
                   </td>
                 </tr>
               ))} 

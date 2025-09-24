@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; // Added this line
-import { LoaderCircle, Wand2, Trash2, Edit } from 'lucide-react';
+import { LoaderCircle, Wand2, Trash2, Edit, ClipboardCopy } from 'lucide-react';
 
 interface SourcedProduct {
   id: string;
@@ -164,6 +164,9 @@ const SourcedProductsPage = () => {
                       </button>
                       <Link href={`/admin/sourced-products/${product.id}`} title="AI 상세페이지 편집" className="inline-flex items-center p-2 border border-gray-300 text-xs font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50">
                         <Edit className="h-4 w-4"/>
+                      </Link>
+                      <Link href={`/admin/manual-registration/${product.id}`} title="수동 등록하기" className="inline-flex items-center p-2 border border-gray-300 text-xs font-medium rounded-md shadow-sm text-gray-700 bg-yellow-500 hover:bg-yellow-600 text-white">
+                        <ClipboardCopy className="h-4 w-4"/>
                       </Link>
                       <button 
                         onClick={() => handleDelete(product.id)}

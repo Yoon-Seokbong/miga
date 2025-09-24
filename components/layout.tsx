@@ -22,6 +22,8 @@ export default function Layout({ children }: LayoutProps) {
   const [categories, setCategories] = useState<Category[]>([]); // State for categories
   const { data: session } = useSession(); // Get session data
 
+  console.log("SESSION DATA:", session); // DEBUGGING LINE
+
   useEffect(() => {
     setItemCount(getTotalItems()); // Update item count on client side
 

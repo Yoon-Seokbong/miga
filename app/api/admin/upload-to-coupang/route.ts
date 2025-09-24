@@ -4,15 +4,31 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { getAllCategories, createCoupangProduct } from '@/lib/coupang-api';
 
+interface CoupangCategory {
+  name: string;
+  displayItemCategoryCode: string;
+  child: CoupangCategory[];
+}
+
+interface FoundCategory {
+  name: string;
+  code: string;
+  fullPath: string;
+}
+
 // Recursive helper to find ALL categories containing a substring and return their full path
-const findAllCategoriesWithSubstring = (categories, substring, currentPath = []) => {
-  let results = [];
+const findAllCategoriesWithSubstring = (
+  categories: CoupangCategory[], 
+  substring: string, 
+  currentPath: string[] = []
+): FoundCategory[] => {
+  let results: FoundCategory[] = [];
   for (const category of categories) {
     const newPath = [...currentPath, category.name];
     if (category.name && category.name.includes(substring)) {
       results.push({
         name: category.name,
-        code: category.displayCategoryCode,
+code: category.displayItemCategoryCode,
         fullPath: newPath.join(' > ') // Add full path
       });
     }

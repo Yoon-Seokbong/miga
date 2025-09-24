@@ -43,7 +43,7 @@ const TiptapEditor = ({ content, onChange }: TiptapEditorProps) => {
   // after the initial render, especially for asynchronous content.
   useEffect(() => {
     if (editor && !editor.isDestroyed && content !== editor.getHTML()) {
-      editor.commands.setContent(content, false);
+      editor.commands.setContent(content, { emitUpdate: false });
     }
   }, [content, editor]);
 

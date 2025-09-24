@@ -6,32 +6,34 @@ const SECRET_KEY = process.env.COUPANG_SECRET_KEY;
 
 /**
  * Generates the HMAC signature required for Coupang API authentication.
+ * This is the final version based on the user's provided standalone script.
  * @param method - The HTTP method (e.g., 'GET', 'POST').
- * @param path - The request path (e.g., '/v2/providers/seller_api/apis/api/v1/product/categories/predict').
- * @param query - The URL query string (if any).
+ * @param path - The request path.
  * @returns The full Authorization header string.
  */
-export function generateHmac(method: string, path: string, query: string = '') {
+export function generateHmac(method: string, path: string) {
   if (!ACCESS_KEY || !SECRET_KEY) {
     throw new Error('Coupang API keys are not configured in .env file.');
   }
 
-  const now = new Date();
-  const year = String(now.getUTCFullYear()).slice(-2);
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(now.getUTCDate()).padStart(2, '0');
-  const hours = String(now.getUTCHours()).padStart(2, '0');
-  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-  const datetime = `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+  // UTC ISO8601 (milliseconds removed, 'Z' retained)
+  const datetime = new Date().toISOString().split('.')[0] + "Z";
 
-  const message = datetime + method.toUpperCase() + path + query;
-
-  const signature = crypto.createHmac('sha256', SECRET_KEY)
+  const message = datetime + method.toUpperCase() + path;
+  
+  const signature = crypto
+    .createHmac("sha256", SECRET_KEY)
     .update(message)
-    .digest('hex');
+    .digest("base64");
 
-  const authorization = `CEA algorithm=HmacSHA256, access-key=${ACCESS_KEY}, signed-date=${datetime}, signature=${signature}`;
+  // Assemble the authorization header exactly as specified
+  const authorization =
+    "CEA algorithm=HmacSHA256, access-key=" +
+    ACCESS_KEY +
+    ", signed-date=" +
+    datetime +
+    ", signature=" +
+    signature;
   
   return authorization;
 }

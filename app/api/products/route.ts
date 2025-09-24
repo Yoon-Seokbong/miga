@@ -142,7 +142,7 @@ export async function POST(request: Request) {
           price,
           stock,
           brand,
-          tags: tags ? tags.split(',').map(tag => tag.trim()).join(',') : '',
+          tags: tags ? tags.split(',').map((tag: string) => tag.trim()).join(',') : '',
           categoryId,
           detailContent, // Save the rich HTML content
           images: {

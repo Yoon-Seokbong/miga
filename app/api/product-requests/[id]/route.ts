@@ -1,25 +1,35 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions);
+
+  if (session?.user?.role !== 'ADMIN') {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+  }
+
+  const id = params.id;
+
   try {
-    const { status } = await request.json();
-
-    if (!status) {
-      return NextResponse.json({ message: 'Status is required' }, { status: 400 });
-    }
-
-    const updatedRequest = await prisma.productRequest.update({
-      where: { id },
-      data: { status },
+    await prisma.productRequest.delete({
+      where: {
+        id: id,
+      },
     });
 
-    return NextResponse.json({ message: 'Product request status updated successfully', updatedRequest }, { status: 200 });
+    return NextResponse.json({ message: 'Product request deleted successfully' });
   } catch (error) {
-    console.error('Error updating product request status:', error);
-    return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+    console.error('Error deleting product request:', error);
+    if (error instanceof Error && (error as any).code === 'P2025') {
+        return NextResponse.json({ message: 'Product request not found' }, { status: 404 });
+    }
+    return NextResponse.json({ message: 'Error deleting product request' }, { status: 500 });
   }
 }

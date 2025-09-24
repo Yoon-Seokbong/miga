@@ -1,12 +1,12 @@
 import { URLSearchParams } from 'url';
+import crypto from 'crypto';
 
 const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID;
 const NAVER_CLIENT_SECRET = process.env.NAVER_CLIENT_SECRET;
 
-const NAVER_AUTH_BASE_URL = 'https://nid.naver.com';
-
 /**
- * Obtains an access token from Naver using Client ID and Client Secret.
+ * Obtains an access token from the Naver Commerce API.
+ * This version attempts to use Basic Authentication as per user's latest instruction.
  * @returns The access token string.
  */
 export async function getNaverAccessToken(): Promise<string> {
@@ -14,30 +14,31 @@ export async function getNaverAccessToken(): Promise<string> {
     throw new Error('Naver API Client ID or Client Secret are not configured in .env file.');
   }
 
+  // Create Base64 encoded credentials for Basic Auth
+  const basicAuth = Buffer.from(`${NAVER_CLIENT_ID}:${NAVER_CLIENT_SECRET}`).toString('base64');
+
   const params = new URLSearchParams();
   params.append('grant_type', 'client_credentials');
-  params.append('client_id', NAVER_CLIENT_ID);
-  params.append('client_secret', NAVER_CLIENT_SECRET);
 
   try {
-    const tokenUrl = `${NAVER_AUTH_BASE_URL}/oauth2.0/token?grant_type=client_credentials&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}`;
-
-    const response = await fetch(tokenUrl, {
+    const response = await fetch(`${NAVER_COMMERCE_API_BASE_URL}/external/v1/oauth2/token`, {
       method: 'POST',
       headers: {
+        'Authorization': `Basic ${basicAuth}`,
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
+      body: params.toString(),
     });
 
     const data = await response.json();
 
-    console.log('--- [DEBUG] Full Response from Naver Token API ---');
+    console.log('--- [DEBUG] Full Response from Naver Token API (Basic Auth Attempt) ---');
     console.log(JSON.stringify(data, null, 2));
-    console.log('-------------------------------------------------');
+    console.log('---------------------------------------------------------------------');
 
     if (!response.ok) {
       console.error('Naver API Token Error:', data);
-      throw new Error(data.error_description || 'Failed to get Naver access token.');
+      throw new Error(data.message || data.error_description || 'Failed to get Naver access token.');
     }
 
     return data.access_token;
@@ -113,6 +114,10 @@ interface MigaProduct {
  * @returns The response from the Naver API.
  */
 export async function createNaverProduct(product: MigaProduct) {
+  if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
+    throw new Error('Naver API Client ID or Client Secret are not configured in .env file.');
+  }
+
   const accessToken = await getNaverAccessToken();
   const method = 'POST';
   const path = '/external/v2/products'; // Likely endpoint for product creation
@@ -170,8 +175,8 @@ export async function createNaverProduct(product: MigaProduct) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
-        'X-Naver-Client-Id': NAVER_CLIENT_ID, // ADDED
-        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET, // ADDED
+        'X-Naver-Client-Id': NAVER_CLIENT_ID,
+        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET,
       },
       body: JSON.stringify(requestBody),
     });
@@ -196,6 +201,10 @@ export async function createNaverProduct(product: MigaProduct) {
  * @returns The response from the Naver API.
  */
 export async function deleteNaverProduct(originProductNo: string) {
+  if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
+    throw new Error('Naver API Client ID or Client Secret are not configured in .env file.');
+  }
+
   const accessToken = await getNaverAccessToken();
   const method = 'DELETE';
   const path = `/external/v2/products/origin-products/${originProductNo}`;
@@ -205,8 +214,8 @@ export async function deleteNaverProduct(originProductNo: string) {
       method,
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'X-Naver-Client-Id': NAVER_CLIENT_ID, // ADDED
-        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET, // ADDED
+        'X-Naver-Client-Id': NAVER_CLIENT_ID,
+        'X-Naver-Client-Secret': NAVER_CLIENT_SECRET,
       },
     });
 

@@ -240,6 +240,7 @@ model SourcedProduct {
   sourcePlatform  String    // e.g., "Amazon", "AliExpress"
   originalName    String
   translatedName  String?
+  brand           String?   // New: Brand of the product, extracted from source
   originalDescription String?
   originalProductDataJson Json? // Added to store full original data
   translatedDescription String?

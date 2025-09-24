@@ -216,10 +216,10 @@ const ProductDetailClient = ({ initialProduct, initialReviews }: ProductDetailCl
         {/* Product Details */}
         <div className="lg:col-span-1 space-y-6">
           <h1 className="text-4xl font-bold text-gray-900">{product.name}</h1>
-          {product.reviewCount > 0 && (
+          {product.reviewCount && product.reviewCount > 0 && (
             <div className="flex items-center space-x-2">
-              <div className="flex">{getStarRating(product.averageRating)}</div>
-              <span className="text-gray-600 text-sm">({product.reviewCount} 리뷰)</span>
+              <div className="flex">{getStarRating(product.averageRating || 0)}</div>
+              <span className="text-gray-600 text-sm">({product.reviewCount || 0} 리뷰)</span>
             </div>
           )}
           
@@ -262,7 +262,7 @@ const ProductDetailClient = ({ initialProduct, initialReviews }: ProductDetailCl
         ];
 
         const reviewsToDisplay = initialReviews.length > 0 ? initialReviews : dummyReviews;
-        const reviewCount = initialReviews.length > 0 ? initialProduct.reviewCount : dummyReviews.length;
+        const reviewCount = initialReviews.length > 0 ? initialProduct.reviewCount || 0 : dummyReviews.length;
 
         // Do not render the review section for '구매대행' products
         if (product.category?.name === '구매대행') {

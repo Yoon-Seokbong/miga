@@ -25,6 +25,9 @@ interface Product {
 const AdminProductsPage = () => {
   const [products, setProducts] = useState<Product[] | null>(null);
   const [uploadStatus, setUploadStatus] = useState<Record<string, { loading: boolean; error: string | null; message: string | null }>>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [coupangCategories, setCoupangCategories] = useState<any[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   const getValidImageUrl = (url: string | undefined | null) => {
     if (!url || url.startsWith('/placeholder-product-')) {
@@ -51,28 +54,61 @@ const AdminProductsPage = () => {
   }, []);
 
   const handleUploadToCoupang = async (productId: string) => {
+    setSelectedProductId(productId);
     setUploadStatus(prev => ({ ...prev, [productId]: { loading: true, error: null, message: null } }));
     try {
-      const res = await fetch('/api/admin/upload-to-coupang', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId }),
-      });
+      const res = await fetch('/api/admin/upload-to-coupang',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, action: 'searchCategories' }), // Add action
+        });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.details || data.error || 'Failed to upload to Coupang');
+        throw new Error(data.details || data.error || 'Failed to fetch Coupang categories');
       }
 
-      setUploadStatus(prev => ({ ...prev, [productId]: { loading: false, error: null, message: '성공적으로 등록 요청됨' } }));
-      // Optionally refetch products to show the coupangSellerProductId
-      // fetchProducts(); 
+      setCoupangCategories(data.results || []);
+      setIsModalOpen(true);
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류';
       setUploadStatus(prev => ({ ...prev, [productId]: { loading: false, error: errorMessage, message: null } }));
+    } finally {
+      // Stop the main button's loading indicator, as the modal will now handle the next step
+      setUploadStatus(prev => ({ ...prev, [productId]: { ...prev[productId], loading: false } }));
     }
   };
+
+  const handleFinalUpload = async (categoryCode: number) => {
+    if (!selectedProductId) return;
+
+    setIsModalOpen(false);
+    setUploadStatus(prev => ({ ...prev, [selectedProductId]: { loading: true, error: null, message: null } }));
+
+    try {
+      const res = await fetch('/api/admin/register-coupang-product', { // New endpoint
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: selectedProductId, categoryCode }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.details || data.error || 'Failed to register product with Coupang');
+      }
+
+      setUploadStatus(prev => ({ ...prev, [selectedProductId]: { loading: false, error: null, message: '쿠팡에 성공적으로 등록됨' } }));
+      // Refetch products to update the UI with the new status
+      // fetchProducts(); 
+
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류';
+      setUploadStatus(prev => ({ ...prev, [selectedProductId]: { loading: false, error: errorMessage, message: null } }));
+    }
+  };
+
 
   const handleDeleteFromCoupang = async (productId: string) => {
     if (!confirm('정말로 이 상품을 쿠팡에서 내리시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
@@ -148,11 +184,21 @@ const AdminProductsPage = () => {
     }
   };
 
-  const handleDelete = async (productId: string /* eslint-disable-line @typescript-eslint/no-unused-vars */) => {
-    if (!confirm('정말로 이 상품을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+  const handleDelete = async (productId: string) => {
+    if (!window.confirm('정말로 이 상품을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
       return;
     }
-    // ... (delete logic is the same)
+    try {
+      const res = await fetch(`/api/products/${productId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || '상품 삭제에 실패했습니다.');
+      }
+      setProducts(prevProducts => prevProducts ? prevProducts.filter(p => p.id !== productId) : []);
+      alert('상품이 성공적으로 삭제되었습니다.');
+    } catch (err) {
+      alert(`삭제 오류: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
+    }
   };
 
   if (products === null) {
@@ -161,6 +207,38 @@ const AdminProductsPage = () => {
 
   return (
     <div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl">
+            <h2 className="text-lg font-bold mb-4">쿠팡 카테고리 선택</h2>
+            <p className="text-sm mb-4">상품과 가장 일치하는 카테고리를 선택해주세요. 전체 경로를 확인하세요.</p>
+            <div className="max-h-96 overflow-y-auto border rounded-md p-2">
+              {coupangCategories.length > 0 ? (
+                <ul>
+                  {coupangCategories.map((cat) => (
+                    <li key={cat.code} className="p-2 hover:bg-gray-100 rounded-md">
+                      <button 
+                        onClick={() => handleFinalUpload(cat.code)}
+                        className="w-full text-left"
+                      >
+                        {cat.fullPath}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>추천 카테고리가 없습니다.</p>
+              )}
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400">
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">제품 관리</h1>
         <Link href="/admin/products/new" className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-600">

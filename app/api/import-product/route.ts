@@ -9,6 +9,7 @@ import {
   } from '@prisma/client';
   import fs from 'fs/promises';
   import path from 'path';
+  import { v4 as uuidv4 } from 'uuid'; // ADDED FOR UNIQUE FILENAMES
   import { GoogleGenerativeAI } from '@google/generative-ai';
 
   const translationClient = new TranslationServiceClient();
@@ -109,10 +110,6 @@ export async function POST(request: Request) {
     }
     const uniqueImageUrls = Array.from(new Set(extractedImageUrls));
     console.log('Unique Image URLs to download:', uniqueImageUrls);
-    // console.log('Received productUrl:', productUrl);
-    // console.log('Received originalData:', originalData);
-    // console.log('Received originalData.title:', originalData?.title);
-    // console.log('Received source:', source);
 
     if (!productUrl || !originalData || !originalData.title || !source) {
       return NextResponse.json({
@@ -205,11 +202,13 @@ export async function POST(request: Request) {
     await ensureUploadDirs();
 
     console.log('About to start image downloads for URLs:', uniqueImageUrls);
-  const imageInfos = await Promise.all(uniqueImageUrls.map(async (url: string, index: number) => {
-      const fileName = `${Date.now()}-${index}.jpg`;
-      const filePath = path.join(uploadDir,
-  fileName);
+    const imageInfos = await Promise.all(uniqueImageUrls.map(async (url: string) => {
       try {
+        // Try to get extension from URL, default to .jpg
+        const extension = url.split('.').pop()?.split('?')[0] || 'jpg';
+        const fileName = `${uuidv4()}.${extension}`; // Use UUID for uniqueness
+        const filePath = path.join(uploadDir, fileName);
+
         await downloadFile(url, filePath);
         return {
           url: `/uploads/${fileName}`,
@@ -218,17 +217,18 @@ export async function POST(request: Request) {
       } catch (error) {
         console.error(`Failed to download image from ${url}:`, error);
         return {
-          url: url,
+          url: url, // Keep original URL on failure
           isDownloaded: false
         };
       }
     }));
 
-    const videoInfos = await Promise.all((originalData.videoUrls || []).map(async (url: string, index: number) => {
-      const fileName = `${Date.now()}-${index}.mp4`;
-      const filePath = path.join(videoUploadDir, fileName);
+    const videoInfos = await Promise.all((originalData.videoUrls || []).map(async (url: string) => {
+      try {
+        const extension = url.split('.').pop()?.split('?')[0] || 'mp4';
+        const fileName = `${uuidv4()}.${extension}`;
+        const filePath = path.join(videoUploadDir, fileName);
 
-   try {
         await downloadFile(url, filePath);
         return {
           url: `/uploads/videos/${fileName}`,

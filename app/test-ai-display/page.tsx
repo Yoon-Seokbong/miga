@@ -157,8 +157,10 @@ const TestAiDisplayPage = () => {
               if (node.type === 'tag' && node.name === 'img') {
                 const { src, alt, width, height, style } = node.attribs;
                 // Attempt to parse width/height from style or use defaults
-                const parsedWidth = style && style.match(/width:\s*(\d+)px/)?.[1] ? parseInt(style.match(/width:\s*(\d+)px/)[1]) : (width ? parseInt(width) : 800); // Default to 800px
-                const parsedHeight = style && style.match(/height:\s*(\d+)px/)?.[1] ? parseInt(style.match(/height:\s*(\d+)px/)[1]) : (height ? parseInt(height) : 600); // Default to 600px
+                const widthMatch = style ? style.match(/width:\s*(\d+)px/) : null;
+                const parsedWidth = widthMatch && widthMatch[1] ? parseInt(widthMatch[1]) : (width ? parseInt(width) : 800); // Default to 800px
+                const heightMatch = style ? style.match(/height:\s*(\d+)px/) : null;
+                const parsedHeight = heightMatch && heightMatch[1] ? parseInt(heightMatch[1]) : (height ? parseInt(height) : 600); // Default to 600px
 
                 // Convert style string to object for Next.js Image component
                 const styleObject = style ? Object.fromEntries(style.split(';').filter(s => s.trim()).map(s => {
