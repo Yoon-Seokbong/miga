@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=12288 next dev",
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=12288 next build",
+    "build": "prisma generate && prisma db push && cross-env NODE_OPTIONS=--max-old-space-size=12288 next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
