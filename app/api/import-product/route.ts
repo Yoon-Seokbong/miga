@@ -1,67 +1,70 @@
-import {
-    NextResponse
-  } from 'next/server';
-  import {
-    TranslationServiceClient
-  } from '@google-cloud/translate';
-  import {
-    PrismaClient
-  } from '@prisma/client';
-  import fs from 'fs/promises';
-  import path from 'path';
-  import { v4 as uuidv4 } from 'uuid'; // ADDED FOR UNIQUE FILENAMES
-  import { GoogleGenerativeAI } from '@google/generative-ai';
+import { NextResponse } from 'next/server';
+import { TranslationServiceClient } from '@google-cloud/translate';
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs/promises';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-  const translationClient = new TranslationServiceClient();
-  const prisma = new PrismaClient();
-
-  const geminiApiKey = process.env.GEMINI_API_KEY;
-  const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
-  const model = genAI ? genAI.getGenerativeModel({
-    model: "gemini-1.5-flash-latest"
-  }) : null;
-  if (!geminiApiKey) {
-    console.log('GEMINI_API_KEY is not set.');
+// --- MODIFIED FOR VERCEL DEPLOYMENT ---
+// Parse credentials from environment variable instead of file path
+const credentialsJson = process.env.GOOGLE_CREDENTIALS_JSON;
+let credentials;
+if (credentialsJson) {
+  try {
+    credentials = JSON.parse(credentialsJson);
+  } catch (e) {
+    console.error("Failed to parse GOOGLE_CREDENTIALS_JSON", e);
   }
-  if (!model) {
-    console.log('Gemini Model could not be initialized.');
+} else {
+  console.log("GOOGLE_CREDENTIALS_JSON environment variable not set.");
+}
+
+const translationClient = new TranslationServiceClient({ credentials });
+// --- END OF MODIFICATION ---
+
+const prisma = new PrismaClient();
+
+const geminiApiKey = process.env.GEMINI_API_KEY;
+const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
+const model = genAI ? genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }) : null;
+if (!geminiApiKey) {
+  console.log('GEMINI_API_KEY is not set.');
+}
+if (!model) {
+  console.log('Gemini Model could not be initialized.');
+}
+
+const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+const videoUploadDir = path.join(uploadDir, 'videos');
+
+async function ensureUploadDirs() {
+  try {
+    await fs.access(uploadDir);
+  } catch {
+    await fs.mkdir(uploadDir, { recursive: true });
   }
-
-
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-  const videoUploadDir = path.join(uploadDir, 'videos');
-
-  async function ensureUploadDirs() {
-    try {
-      await fs.access(uploadDir);
-    } catch {
-      await fs.mkdir(uploadDir, {
-        recursive: true
-      });
-    }
-    try {
-      await fs.access(videoUploadDir);
-    } catch {
-      await fs.mkdir(videoUploadDir, {
-        recursive: true
-      });
-    }
+  try {
+    await fs.access(videoUploadDir);
+  } catch {
+    await fs.mkdir(videoUploadDir, { recursive: true });
   }
+}
 
-  async function downloadFile(url: string, destinationPath: string) {
-  console.log(`Attempting to download: ${url} to ${destinationPath}`); // Added log
+async function downloadFile(url: string, destinationPath: string) {
+  console.log(`Attempting to download: ${url} to ${destinationPath}`);
   const response = await fetch(url);
   if (!response.ok) {
-    console.error(`Failed to download file from ${url}: ${response.status} ${response.statusText}`); // More detailed error
+    console.error(`Failed to download file from ${url}: ${response.status} ${response.statusText}`);
     throw new Error(`Failed to download file from ${url}: ${response.statusText}`);
   }
   const arrayBuffer = await response.arrayBuffer();
-  try { // Added try-catch for writeFile
+  try {
     await fs.writeFile(destinationPath, Buffer.from(arrayBuffer));
-    console.log(`Successfully downloaded: ${destinationPath}`); // Added success log
+    console.log(`Successfully downloaded: ${destinationPath}`);
   } catch (writeError) {
     console.error(`Failed to write file ${destinationPath}:`, writeError);
-    throw writeError; // Re-throw to be caught by outer catch
+    throw writeError;
   }
 }
 
@@ -79,16 +82,9 @@ function parsePriceRange(priceInput: string | number): number {
 
 export async function POST(request: Request) {
   try {
-
     const requestBody = await request.json();
-    const {
-      productUrl,
-      originalData,
-      translatedData,
-      source
-    } = requestBody;
+    const { productUrl, originalData, translatedData, source } = requestBody;
 
-    // Extract image URLs from originalData
     const extractedImageUrls: string[] = [];
     if (originalData.main_images) {
       for (const img_obj of originalData.main_images) {
@@ -112,11 +108,7 @@ export async function POST(request: Request) {
     console.log('Unique Image URLs to download:', uniqueImageUrls);
 
     if (!productUrl || !originalData || !originalData.title || !source) {
-      return NextResponse.json({
-        message: 'Invalid or incomplete product data provided.'
-      }, {
-        status: 400
-      });
+      return NextResponse.json({ message: 'Invalid or incomplete product data provided.' }, { status: 400 });
     }
 
     let translatedProductName = (translatedData?.productName || '').trim();
@@ -125,13 +117,13 @@ export async function POST(request: Request) {
     if (!translatedProductName || !translatedProductDescription) {
       try {
         const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
-        if (!projectId) {
-          console.warn('GOOGLE_CLOUD_PROJECT_ID is not set. Skipping translation.');
+        if (!projectId || !credentials) { // Check for credentials too
+          console.warn('Google Cloud project ID or credentials are not set. Skipping translation.');
           translatedProductName = originalData.title;
           translatedProductDescription = originalData.productDescription || '';
         } else {
           if (originalData.title) {
-           const [nameTranslation] = await translationClient.translateText({
+            const [nameTranslation] = await translationClient.translateText({
               parent: `projects/${projectId}/locations/global`,
               contents: [originalData.title],
               targetLanguageCode: 'ko',
@@ -185,8 +177,7 @@ export async function POST(request: Request) {
           5.  **Final Output:** Provide ONLY the raw HTML code for the detail page content. Do not include any other text, explanations, or markdown.
         `;
 
-
-          const result = await model.generateContent(prompt);
+        const result = await model.generateContent(prompt);
         const response = await result.response;
         generatedDetailContent = response.text().trim();
         console.log('AI generated detail HTML content successfully.');
@@ -204,9 +195,8 @@ export async function POST(request: Request) {
     console.log('About to start image downloads for URLs:', uniqueImageUrls);
     const imageInfos = await Promise.all(uniqueImageUrls.map(async (url: string) => {
       try {
-        // Try to get extension from URL, default to .jpg
         const extension = url.split('.').pop()?.split('?')[0] || 'jpg';
-        const fileName = `${uuidv4()}.${extension}`; // Use UUID for uniqueness
+        const fileName = `${uuidv4()}.${extension}`;
         const filePath = path.join(uploadDir, fileName);
 
         await downloadFile(url, filePath);
@@ -217,7 +207,7 @@ export async function POST(request: Request) {
       } catch (error) {
         console.error(`Failed to download image from ${url}:`, error);
         return {
-          url: url, // Keep original URL on failure
+          url: url,
           isDownloaded: false
         };
       }
@@ -262,14 +252,14 @@ export async function POST(request: Request) {
       },
       create: {
         sourceUrl: productUrl,
-        sourceProductId: "some-id", // Assuming mainProductData.id exists
+        sourceProductId: "some-id",
         sourcePlatform: source,
         originalName: originalData.title,
         translatedName: translatedProductName,
         originalDescription: originalData.productDescription || null,
         translatedDescription: translatedProductDescription || null,
         originalPrice: price,
-        currency: 'CNY', // Hardcoded for 1688.com
+        currency: 'CNY',
         images: imageInfos,
         videos: videoInfos,
         attributes: originalData.attributes,
@@ -280,23 +270,13 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      message:
-  'Product data received, translated, and saved successfully.',
+      message: 'Product data received, translated, and saved successfully.',
       productId: savedProduct.id
-
-  });
+    });
 
   } catch (error) {
     console.error('Error in POST /api/import-product:', error);
-    const
-  errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-    return
-  NextResponse.json({
-      message: 'An error occurred while processing the request.',
-      error:
-  errorMessage
-    }, {
-      status: 500
-    });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ message: 'An error occurred while processing the request.', error: errorMessage }, { status: 500 });
   }
 }
