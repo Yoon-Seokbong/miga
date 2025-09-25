@@ -43,16 +43,16 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-primary text-white p-4 shadow-md">
-        <div className="container mx-auto flex items-center gap-x-8">
+        <div className="container mx-auto flex items-center gap-x-4">
           <h1 className="text-2xl font-bold"><Link href="/">MIGA 쇼핑몰</Link></h1>
           <nav className="flex-grow">
             <div className="flex justify-between items-center">
               {/* Left-aligned main menu */}
-              <ul className="flex items-center space-x-2">
-                <li><Link href="/" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">홈</Link></li>
+              <ul className="flex items-center space-x-1">
+                <li><Link href="/" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">홈</Link></li>
                 {categories.map(parentCategory => (
                   <li key={parentCategory.id} className="relative group">
-                    <span className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors cursor-pointer">
+                    <span className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors cursor-pointer">
                       {parentCategory.name}
                     </span>
                     {parentCategory.subcategories && parentCategory.subcategories.length > 0 && (
@@ -71,23 +71,23 @@ export default function Layout({ children }: LayoutProps) {
               </ul>
 
               {/* Right-aligned utility menu */}
-              <ul className="flex items-center space-x-2">
-                <li><Link href="/my-orders" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">나의 주문</Link></li>
-                <li><Link href="/my-reviews" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">내 활동 내역</Link></li>
+              <ul className="flex items-center space-x-1">
+                <li><Link href="/my-orders" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">나의 주문</Link></li>
+                <li><Link href="/my-reviews" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">내 활동 내역</Link></li>
                 <li>
-                  <Link href="/cart" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">
+                  <Link href="/cart" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">
                     장바구니 ({itemCount})
                   </Link>
                 </li>
-                <li><Link href="/request-product" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">상품 요청</Link></li>
+                <li><Link href="/request-product" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">상품 요청</Link></li>
                 {session?.user?.role === 'ADMIN' && (
-                  <li><Link href="/admin" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">관리자</Link></li>
+                  <li><Link href="/admin" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">관리자</Link></li>
                 )}
                 {session?.user ? (
                   <>
-                    <li><Link href="/my-account/wishlist" className="text-sm px-2 py-1 rounded-md hover:bg-gray-700 transition-colors">위시리스트</Link></li>
+                    <li><Link href="/my-account/wishlist" className="text-sm px-1 py-1 rounded-md hover:bg-gray-700 transition-colors">위시리스트</Link></li>
                     <li>
-                      <button onClick={() => signOut()} className="text-sm px-2 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                      <button onClick={() => signOut()} className="text-sm px-1 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
                         로그아웃
                       </button>
                     </li>
@@ -95,12 +95,12 @@ export default function Layout({ children }: LayoutProps) {
                 ) : (
                   <>
                     <li>
-                      <Link href="/auth/login" className="text-sm px-2 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                      <Link href="/auth/login" className="text-sm px-1 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
                         로그인
                       </Link>
                     </li>
                     <li>
-                      <Link href="/auth/register" className="text-sm px-2 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
+                      <Link href="/auth/register" className="text-sm px-1 py-1 rounded-md bg-purple-700 text-white hover:bg-purple-800 transition-colors">
                         회원가입
                       </Link>
                     </li>
