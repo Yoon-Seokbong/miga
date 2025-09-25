@@ -2,7 +2,7 @@
   "name": "miga-ecommerce-store",
   "version": "0.1.0",
   "private": true,
-  "description": "MIGA Shopping Mall - Final deployment trigger",
+  "description": "MIGA Shopping Mall - Testing Git Integration",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=12288 next dev",
     "build": "prisma generate && prisma db push && cross-env NODE_OPTIONS=--max-old-space-size=12288 next build",
