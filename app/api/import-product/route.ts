@@ -9,7 +9,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // --- MODIFIED FOR VERCEL DEPLOYMENT ---
 // Parse credentials from environment variable instead of file path
 const credentialsJson = process.env.GOOGLE_CREDENTIALS_JSON;
-let credentials;
+let credentials: object | undefined;
 if (credentialsJson) {
   try {
     credentials = JSON.parse(credentialsJson);
